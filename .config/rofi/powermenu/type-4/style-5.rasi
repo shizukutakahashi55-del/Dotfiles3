@@ -1,0 +1,156 @@
+/*****----- Power Menu - Catppuccin Mocha + SVG Icons + User Image -----*****/
+
+configuration {
+    show-icons:         true;
+    font:               "JetBrainsMono Nerd Font Bold 14";
+}
+
+* {
+    base:       #1e1e2ecc;
+    surface0:   #313244;
+    overlay0:   #6c7086;
+    text:       #cdd6f4;
+    subtext:    #a6adc8;
+    mauve:      #cba6f7;
+    red:        #f38ba8;
+
+    background-color:   transparent;
+    text-color:         @text;
+}
+
+/*****----- Main Window -----*****/
+window {
+    transparency:       "real";
+    location:           center;
+    anchor:             center;
+    fullscreen:         true;
+    background-color:   #1e1e2ecc;
+    cursor:             "default";
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+    enabled:            true;
+    spacing:            24px;
+    background-color:   transparent;
+    children:           [ "dummy", "userimage-box", "inputbar", "message", "listview", "dummy" ];
+}
+
+dummy {
+    background-color:   transparent;
+}
+
+/*****----- User Image centrada -----*****/
+userimage-box {
+    background-color:   transparent;
+    children:           [ "dummy-left", "userimage", "dummy-right" ];
+    orientation:        horizontal;
+    expand:             true;
+}
+
+dummy-left, dummy-right {
+    background-color:   transparent;
+    expand:             true;
+}
+
+userimage {
+    expand:             false;
+    width:              120px;
+    height:             120px;
+    border:             3px solid;
+    border-radius:      100%;
+    border-color:       @mauve;
+    background-color:   transparent;
+    background-image:   url("/home/rinooze/.config/rofi/images/user_circle.png", both);
+    horizontal-align:   0.5;
+    vertical-align:     0.5;
+}
+
+/*****----- Prompt -----*****/
+inputbar {
+    enabled:            true;
+    padding:            0px;
+    background-color:   transparent;
+    children:           [ "prompt" ];
+}
+
+prompt {
+    enabled:            true;
+    font:               "JetBrainsMono Nerd Font Bold 18";
+    background-color:   transparent;
+    text-color:         @mauve;
+    horizontal-align:   0.5;
+}
+
+/*****----- Message (uptime) -----*****/
+message {
+    enabled:            true;
+    padding:            8px 20px;
+    background-color:   transparent;
+}
+
+textbox {
+    font:               "JetBrainsMono Nerd Font 12";
+    background-color:   transparent;
+    text-color:         @subtext;
+    horizontal-align:   0.5;
+}
+
+/*****----- Listview -----*****/
+listview {
+    enabled:            true;
+    expand:             false;
+    columns:            5;
+    lines:              1;
+    cycle:              true;
+    dynamic:            false;
+    scrollbar:          false;
+    layout:             vertical;
+    fixed-height:       true;
+    fixed-columns:      true;
+    spacing:            20px;
+    margin:             0px 160px;
+    background-color:   transparent;
+    cursor:             "default";
+}
+
+/*****----- Elements -----*****/
+element {
+    enabled:            true;
+    padding:            30px 20px 20px 20px;
+    border-radius:      16px;
+    background-color:   #31324455;
+    text-color:         @subtext;
+    cursor:             pointer;
+    orientation:        vertical;
+    spacing:            14px;
+}
+
+element-icon {
+    size:               72px;
+    background-color:   transparent;
+    cursor:             inherit;
+    horizontal-align:   0.5;
+}
+
+element-text {
+    font:               "JetBrainsMono Nerd Font Bold 13";
+    background-color:   transparent;
+    text-color:         inherit;
+    cursor:             inherit;
+    horizontal-align:   0.5;
+    vertical-align:     0.5;
+}
+
+element normal.normal {
+    background-color:   #31324455;
+    text-color:         @subtext;
+}
+
+element selected.normal {
+    background-color:   #cba6f720;
+    text-color:         @mauve;
+    border:             2px solid;
+    border-color:       @mauve;
+    border-radius:      16px;
+}

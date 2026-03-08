@@ -1,0 +1,275 @@
+/* ============================================================
+   Geany GTK3 CSS — rinooze
+   Catppuccin Mocha
+   ============================================================ */
+
+/* ── Base ────────────────────────────────────────────────── */
+* {
+    font-family: 'JetBrainsMono Nerd Font', monospace;
+}
+
+window, .geany-window {
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+}
+
+/* ── Notebook / Tabs ─────────────────────────────────────── */
+notebook header {
+    background-color: #181825;
+    border-bottom: 1px solid #313244;
+}
+
+notebook tab {
+    background-color: #181825;
+    color: #6c7086;
+    padding: 4px 10px;
+    border: none;
+    border-bottom: 2px solid transparent;
+}
+
+notebook tab:checked {
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+    border-bottom: 2px solid #cba6f7;
+}
+
+notebook tab:hover {
+    background-color: #24273a;
+    color: #bac2de;
+}
+
+/* ── Botón cerrar tab ────────────────────────────────────── */
+#geany-close-tab-button {
+    outline-offset: 0;
+    outline-width: 0;
+    margin: 0;
+    margin-left: 0.5em;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    color: #6c7086;
+}
+
+#geany-close-tab-button:hover {
+    color: #f38ba8;
+}
+
+#geany-close-tab-button image {
+    padding: 0;
+}
+
+/* ── Toolbar ─────────────────────────────────────────────── */
+toolbar {
+    background-color: #181825;
+    border-bottom: 1px solid #313244;
+    padding: 2px 4px;
+}
+
+toolbar button {
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #bac2de;
+    padding: 4px;
+    margin: 1px;
+}
+
+toolbar button:hover {
+    background-color: rgba(203, 166, 247, 0.15);
+    color: #cba6f7;
+}
+
+toolbar button:active {
+    background-color: rgba(203, 166, 247, 0.25);
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.sidebar {
+    background-color: #181825;
+    border-right: 1px solid #313244;
+}
+
+treeview {
+    background-color: #181825;
+    color: #cdd6f4;
+}
+
+treeview:selected {
+    background-color: rgba(203, 166, 247, 0.2);
+    color: #cba6f7;
+}
+
+treeview:hover {
+    background-color: rgba(203, 166, 247, 0.1);
+}
+
+/* ── Statusbar ───────────────────────────────────────────── */
+statusbar {
+    background-color: #11111b;
+    color: #6c7086;
+    border-top: 1px solid #313244;
+    font-size: 11px;
+    padding: 0 8px;
+    margin: 0;
+}
+
+/* ── Mensajes / Output ───────────────────────────────────── */
+.geany-msgwin {
+    background-color: #181825;
+}
+
+textview {
+    background-color: #181825;
+    color: #cdd6f4;
+}
+
+textview text {
+    background-color: #181825;
+    color: #cdd6f4;
+}
+
+/* ── Búsqueda ────────────────────────────────────────────── */
+#GeanyDialogSearch entry {
+    font-family: 'JetBrainsMono Nerd Font', monospace;
+    background-color: #313244;
+    color: #cdd6f4;
+    border: 1px solid #45475a;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+#GeanyDialogSearch entry:focus {
+    border-color: #cba6f7;
+}
+
+#geany-search-entry-no-match {
+    color: #1e1e2e;
+    background: #f38ba8;
+}
+
+#geany-search-entry-no-match selection {
+    color: #1e1e2e;
+    background-color: #c2738a;
+}
+
+/* ── Entradas y botones globales ─────────────────────────── */
+entry {
+    background-color: #313244;
+    color: #cdd6f4;
+    border: 1px solid #45475a;
+    border-radius: 6px;
+    padding: 4px 8px;
+    caret-color: #cba6f7;
+}
+
+entry:focus {
+    border-color: #cba6f7;
+    box-shadow: none;
+}
+
+button {
+    background-color: #313244;
+    color: #cdd6f4;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+}
+
+button:hover {
+    background-color: #45475a;
+    color: #cba6f7;
+}
+
+button:active {
+    background-color: rgba(203, 166, 247, 0.3);
+}
+
+/* ── Menús ───────────────────────────────────────────────── */
+menu {
+    background-color: #181825;
+    color: #cdd6f4;
+    border: 1px solid #313244;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+menuitem {
+    border-radius: 6px;
+    padding: 4px 12px;
+    color: #cdd6f4;
+}
+
+menuitem:hover {
+    background-color: rgba(203, 166, 247, 0.2);
+    color: #cba6f7;
+}
+
+menuitem:disabled {
+    color: #6c7086;
+}
+
+separator {
+    background-color: #313244;
+    margin: 4px 0;
+}
+
+/* ── Scrollbars ──────────────────────────────────────────── */
+scrollbar {
+    background-color: transparent;
+    border: none;
+}
+
+scrollbar slider {
+    background-color: #313244;
+    border-radius: 4px;
+    min-width: 5px;
+    min-height: 5px;
+}
+
+scrollbar slider:hover {
+    background-color: #cba6f7;
+}
+
+/* ── Estado documentos ───────────────────────────────────── */
+#geany-document-status-changed {
+    color: #f38ba8;
+}
+
+#geany-document-status-disk-changed {
+    color: #fab387;
+}
+
+#geany-document-status-readonly {
+    color: #a6e3a1;
+}
+
+/* ── Compilador ──────────────────────────────────────────── */
+#geany-compiler-error {
+    color: #f38ba8;
+}
+
+#geany-compiler-context {
+    color: #fab387;
+}
+
+#geany-compiler-message {
+    color: #89b4fa;
+}
+
+/* ── Terminal ────────────────────────────────────────────── */
+#geany-terminal-dirty {
+    color: #f38ba8;
+}
+
+/* ── Paneles y separadores ───────────────────────────────── */
+paned > separator {
+    background-color: #313244;
+    min-width: 1px;
+    min-height: 1px;
+}
+
+/* ── Selección de texto ──────────────────────────────────── */
+selection {
+    background-color: rgba(203, 166, 247, 0.3);
+    color: #cdd6f4;
+}

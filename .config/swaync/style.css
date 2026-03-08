@@ -1,0 +1,263 @@
+/* ============================================================
+   swaync style.css — rinooze
+   Catppuccin Mocha
+   ============================================================ */
+
+/* ── Palette ─────────────────────────────────────────────── */
+* {
+    font-family: 'JetBrainsMono Nerd Font', monospace;
+    font-size: 16px;
+
+    --base:      #1e1e2e;
+    --mantle:    #181825;
+    --crust:     #11111b;
+    --surface0:  #313244;
+    --surface1:  #45475a;
+    --overlay0:  #6c7086;
+    --text:      #cdd6f4;
+    --subtext:   #bac2de;
+    --mauve:     #cba6f7;
+    --blue:      #89b4fa;
+    --sapphire:  #74c7ec;
+    --green:     #a6e3a1;
+    --yellow:    #f9e2af;
+    --peach:     #fab387;
+    --red:       #f38ba8;
+    --pink:      #f5c2e7;
+    --teal:      #94e2d5;
+}
+
+/* ── Control Center ──────────────────────────────────────── */
+.control-center {
+    background-color: var(--base);
+    border-radius: 16px;
+    border: 1px solid var(--surface0);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    padding: 8px;
+}
+
+.control-center-list {
+    background: transparent;
+}
+
+.control-center-list-placeholder {
+    opacity: 0.4;
+    color: var(--overlay0);
+}
+
+/* ── Título ──────────────────────────────────────────────── */
+.widget-title {
+    color: var(--mauve);
+    font-size: 15px;
+    font-weight: bold;
+    padding: 12px 16px 8px 16px;
+    letter-spacing: 1px;
+}
+
+.widget-title > button {
+    font-size: 12px;
+    color: var(--subtext);
+    background-color: var(--surface0);
+    border: none;
+    border-radius: 8px;
+    padding: 4px 10px;
+    transition: all 150ms ease;
+}
+
+.widget-title > button:hover {
+    background-color: var(--red);
+    color: var(--base);
+}
+
+/* ── No molestar ─────────────────────────────────────────── */
+.widget-dnd {
+    color: var(--text);
+    padding: 4px 16px 8px 16px;
+}
+
+.widget-dnd > switch {
+    border-radius: 12px;
+    background-color: var(--surface0);
+    border: none;
+}
+
+.widget-dnd > switch:checked {
+    background-color: var(--mauve);
+}
+
+.widget-dnd > switch slider {
+    background-color: var(--base);
+    border-radius: 50%;
+    min-width: 18px;
+    min-height: 18px;
+    margin: 2px;
+}
+
+/* ── Notificación individual ─────────────────────────────── */
+.notification-row {
+    margin: 4px 0;
+}
+
+.notification-row:focus,
+.notification-row:hover {
+    opacity: 1;
+    background: transparent;
+}
+
+.notification {
+    background-color: var(--mantle);
+    border-radius: 12px;
+    border: 1px solid var(--surface0);
+    padding: 12px;
+    margin: 2px 4px;
+    transition: all 150ms ease;
+}
+
+.notification:hover {
+    border-color: var(--mauve);
+}
+
+/* Urgencia baja */
+.notification.low {
+    border-left: 3px solid var(--blue);
+}
+
+/* Urgencia normal */
+.notification.normal {
+    border-left: 3px solid var(--mauve);
+}
+
+/* Urgencia crítica */
+.notification.critical {
+    border-left: 3px solid var(--red);
+    background-color: #2a1a1e;
+}
+
+/* ── Contenido de notificación ───────────────────────────── */
+.notification-content {
+    padding: 0;
+}
+
+.notification-default-action {
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+}
+
+.notification-default-action:hover {
+    background-color: var(--surface0);
+}
+
+.app-name {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--mauve);
+    letter-spacing: 0.5px;
+}
+
+.app-icon {
+    -gtk-icon-size: 36px;
+}
+
+.summary {
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--text);
+    margin-top: 2px;
+}
+
+.time {
+    font-size: 10px;
+    color: var(--overlay0);
+}
+
+.body {
+    font-size: 12px;
+    color: var(--subtext);
+    margin-top: 4px;
+}
+
+/* ── Botón cerrar ────────────────────────────────────────── */
+.close-button {
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--overlay0);
+    padding: 2px 6px;
+    font-size: 14px;
+    transition: all 150ms ease;
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.close-button:hover {
+    background-color: var(--red);
+    color: var(--base);
+}
+
+/* ── Acciones de notificación ────────────────────────────── */
+.notification-action {
+    background-color: var(--surface0);
+    border: none;
+    border-radius: 8px;
+    color: var(--text);
+    padding: 4px 12px;
+    margin: 4px 2px 0 2px;
+    font-size: 12px;
+    transition: all 150ms ease;
+}
+
+.notification-action:hover {
+    background-color: var(--mauve);
+    color: var(--base);
+}
+
+/* ── Popup (notificación flotante) ───────────────────────── */
+.notification-popup {
+    background-color: var(--mantle);
+    border-radius: 12px;
+    border: 1px solid var(--surface0);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    margin: 4px 8px;
+}
+
+.notification-popup.critical {
+    border-color: var(--red);
+    box-shadow: 0 4px 24px rgba(243, 139, 168, 0.3);
+}
+
+/* ── Inhibidores ─────────────────────────────────────────── */
+.widget-inhibitors {
+    color: var(--text);
+    padding: 4px 16px;
+}
+
+.widget-inhibitors > button {
+    background-color: var(--surface0);
+    border: none;
+    border-radius: 8px;
+    color: var(--subtext);
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+.widget-inhibitors > button:hover {
+    background-color: var(--yellow);
+    color: var(--base);
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+scrollbar {
+    background-color: transparent;
+}
+
+scrollbar slider {
+    background-color: var(--surface0);
+    border-radius: 4px;
+    min-width: 4px;
+}
+
+scrollbar slider:hover {
+    background-color: var(--mauve);
+}

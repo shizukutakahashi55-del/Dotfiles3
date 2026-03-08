@@ -1,0 +1,129 @@
+/*****----- Network Menu - Catppuccin Mocha -----*****/
+
+* {
+    background-color:   transparent;
+    text-color:         #cdd6f4;
+
+    bg:         #1e1e2eee;
+    surface:    #313244aa;
+    border-col: #cba6f755;
+    mauve:      #cba6f7;
+    blue:       #89b4fa;
+    green:      #a6e3a1;
+    red:        #f38ba8;
+    subtext:    #a6adc8;
+    overlay:    #6c7086;
+}
+
+window {
+    transparency:       "real";
+    location:           center;
+    anchor:             center;
+    width:              480px;
+    border-radius:      16px;
+    border:             2px solid;
+    border-color:       @border-col;
+    background-color:   @bg;
+    cursor:             "default";
+}
+
+mainbox {
+    spacing:            0px;
+    background-color:   transparent;
+    children:           [ "inputbar", "message", "listview" ];
+}
+
+/*****----- Inputbar -----*****/
+inputbar {
+    padding:            12px 16px;
+    background-color:   transparent;
+    border-radius:      16px 16px 0 0;
+    children:           [ "prompt", "entry" ];
+    spacing:            8px;
+}
+
+prompt {
+    font:               "JetBrainsMono Nerd Font Bold 13";
+    background-color:   transparent;
+    text-color:         @mauve;
+    vertical-align:     0.5;
+}
+
+entry {
+    font:               "JetBrainsMono Nerd Font 13";
+    background-color:   transparent;
+    text-color:         @subtext;
+    vertical-align:     0.5;
+    placeholder:        "Buscar...";
+    placeholder-color:  @overlay;
+}
+
+/*****----- Message (estado) -----*****/
+message {
+    padding:            8px 16px;
+    background-color:   @surface;
+    text-color:         @subtext;
+}
+
+textbox {
+    font:               "JetBrainsMono Nerd Font 11";
+    background-color:   transparent;
+    text-color:         inherit;
+    horizontal-align:   0.0;
+}
+
+/*****----- Listview -----*****/
+listview {
+    padding:            8px;
+    spacing:            4px;
+    background-color:   transparent;
+    scrollbar:          false;
+    lines:              8;
+    fixed-height:       false;
+}
+
+/*****----- Elements -----*****/
+element {
+    padding:            10px 14px;
+    border-radius:      10px;
+    background-color:   transparent;
+    text-color:         @subtext;
+    cursor:             pointer;
+    spacing:            10px;
+}
+
+element-icon {
+    size:               20px;
+    background-color:   transparent;
+    cursor:             inherit;
+}
+
+element-text {
+    font:               "JetBrainsMono Nerd Font 13";
+    background-color:   transparent;
+    text-color:         inherit;
+    cursor:             inherit;
+    vertical-align:     0.5;
+}
+
+element normal.normal {
+    background-color:   transparent;
+    text-color:         @subtext;
+}
+
+element selected.normal {
+    background-color:   #cba6f720;
+    text-color:         @mauve;
+    border:             1px solid;
+    border-color:       #cba6f740;
+    border-radius:      10px;
+}
+
+element normal.urgent {
+    text-color:         @red;
+}
+
+element selected.urgent {
+    background-color:   #f38ba820;
+    text-color:         @red;
+}

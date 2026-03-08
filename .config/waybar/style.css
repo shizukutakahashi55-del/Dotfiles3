@@ -1,0 +1,204 @@
+/* ============================================
+ *   WAYBAR - Catppuccin Mocha + Pill Style
+ *   ============================================ */
+
+/* --- Catppuccin Mocha Palette --- */
+@define-color base      #1e1e2e;
+@define-color mantle    #181825;
+@define-color crust     #11111b;
+@define-color surface0  #313244;
+@define-color surface1  #45475a;
+@define-color surface2  #585b70;
+@define-color overlay0  #6c7086;
+@define-color overlay1  #7f849c;
+@define-color text      #cdd6f4;
+@define-color subtext0  #a6adc8;
+@define-color subtext1  #bac2de;
+@define-color lavender  #b4befe;
+@define-color blue      #89b4fa;
+@define-color sapphire  #74c7ec;
+@define-color sky       #89dceb;
+@define-color teal      #94e2d5;
+@define-color green     #a6e3a1;
+@define-color yellow    #f9e2af;
+@define-color peach     #fab387;
+@define-color maroon    #eba0ac;
+@define-color red       #f38ba8;
+@define-color mauve     #cba6f7;
+@define-color pink      #f5c2e7;
+@define-color flamingo  #f2cdcd;
+@define-color rosewater #f5e0dc;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+/* --- Barra principal --- */
+window#waybar {
+    background: transparent;
+    color: @text;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+/* --- Contenedor general --- */
+.modules-left,
+.modules-center,
+.modules-right {
+    background: alpha(@base, 0.88);
+    border-radius: 999px;
+    padding: 0 10px;
+    margin: 4px 0;
+    box-shadow: 0 4px 16px alpha(#000000, 0.4);
+    border: 1px solid alpha(@surface0, 0.6);
+}
+
+/* --- Módulos base --- */
+#custom-power,
+#custom-spotify,
+#clock,
+#workspaces,
+#privacy,
+#cpu,
+#memory,
+#pulseaudio,
+#bluetooth,
+#network,
+#custom-notifications,
+#tray {
+padding: 4px 10px;
+color: @text;
+border-radius: 999px;
+transition: all 0.2s ease;
+}
+
+/* --- Separadores entre módulos --- */
+#custom-power { color: @red; padding-right: 6px; }
+#clock        { color: @lavender; }
+#cpu          { color: @sapphire; }
+#memory       { color: @teal; }
+#pulseaudio   { color: @green; }
+#bluetooth    { color: @blue; }
+#network      { color: @sky; }
+#custom-notifications { color: @mauve; }
+
+/* --- Spotify --- */
+#custom-spotify {
+background: linear-gradient(45deg, #1DB954, #191414);
+color: #ffffff;
+border-radius: 999px;
+padding: 0 15px;
+margin: 4px 6px;
+font-weight: bold;
+min-width: 240px;  /* ← agregar esto */
+}
+
+#custom-spotify.Playing  { background: linear-gradient(45deg, #1DB954, #191414); color: #ffffff; }
+/*#custom-spotify.Paused   { background: linear-gradient(45deg, #191414, #1DB954); color: rgba(255,255,255,0.5); }*/
+/*#custom-spotify.Stopped  { background: alpha(@surface0, 0.6); color: @overlay0; }*/
+
+#custom-spotify:hover    { background: linear-gradient(45deg, #1ed760, #191414); }
+
+/* --- Workspaces --- */
+#workspaces {
+padding: 4px 8px;
+}
+
+#workspaces button {
+padding: 2px 7px;
+color: @overlay0;
+background: transparent;
+border-radius: 999px;
+border: none;
+box-shadow: none;
+transition: all 0.15s ease;
+min-width: 0;
+}
+
+#workspaces button:hover {
+background: alpha(@surface0, 0.6);
+color: @text;
+}
+
+#workspaces button.active {
+background: @mauve;
+color: @base;
+font-weight: 700;
+padding: 2px 10px;
+}
+
+#workspaces button.urgent {
+background: @red;
+color: @base;
+}
+
+#workspaces button.persistent {
+color: @surface1;
+}
+
+/* --- Privacy --- */
+#privacy {
+color: @peach;
+}
+
+#privacy-item {
+padding: 0 4px;
+}
+
+#privacy-item.screenshare { color: @yellow; }
+#privacy-item.audio-in    { color: @red; }
+
+/* --- Pulseaudio muted --- */
+#pulseaudio.muted {
+color: @surface2;
+}
+
+/* --- Bluetooth --- */
+#bluetooth.off         { color: @surface2; }
+#bluetooth.on          { color: @blue; }
+#bluetooth.connected   { color: @sapphire; }
+#bluetooth.discoverable { color: @peach; }
+#bluetooth.pairable    { color: @yellow; }
+
+/* --- Network --- */
+#network.disconnected { color: @red; }
+#network.wifi         { color: @sky; }
+#network.ethernet     { color: @teal; }
+
+/* --- Notificaciones --- */
+#custom-notifications.none        { color: @overlay0; }
+#custom-notifications.notification { color: @mauve; }
+#custom-notifications.dnd-notification,
+#custom-notifications.dnd         { color: @surface2; }
+
+/* --- Tray --- */
+#tray {
+padding: 4px 8px;
+}
+
+#tray > .passive {
+-gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+-gtk-icon-effect: highlight;
+background-color: alpha(@red, 0.2);
+border-radius: 999px;
+}
+
+/* --- Hover general --- */
+#custom-power:hover         { background: alpha(@red, 0.15); color: @red; }
+#clock:hover                { background: alpha(@lavender, 0.12); }
+#cpu:hover                  { background: alpha(@sapphire, 0.12); }
+#memory:hover               { background: alpha(@teal, 0.12); }
+#pulseaudio:hover           { background: alpha(@green, 0.12); }
+#bluetooth:hover            { background: alpha(@blue, 0.12); }
+#network:hover              { background: alpha(@sky, 0.12); }
+#custom-notifications:hover { background: alpha(@mauve, 0.12); }

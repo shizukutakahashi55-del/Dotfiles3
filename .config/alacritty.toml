@@ -1,0 +1,76 @@
+# -----------------------------
+# Ventana / Apariencia
+# -----------------------------
+
+[window]
+opacity = 0.6
+blur = false
+
+# -----------------------------
+# Fuente
+# -----------------------------
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style = "Italic"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style = "Bold Italic"
+
+# -----------------------------
+# Cursor
+# -----------------------------
+
+[cursor]
+style = { shape = "Block", blinking = "Never" }
+
+# -----------------------------
+# Colores pastel suaves
+# -----------------------------
+
+[colors.primary]
+foreground = "#d8dee9"
+background = "#1e1e2e"
+
+[colors.selection]
+text = "#1e1e2e"
+background = "#f2cdcd"
+
+[colors.normal]
+black   = "#6e6c7e"
+red     = "#f38ba8"
+green   = "#a6e3a1"
+yellow  = "#f9e2af"
+blue    = "#89b4fa"
+magenta = "#f5c2e7"
+cyan    = "#94e2d5"
+white   = "#bac2de"
+
+[colors.bright]
+black   = "#988ba2"
+red     = "#f38ba8"
+green   = "#a6e3a1"
+yellow  = "#f9e2af"
+blue    = "#89b4fa"
+magenta = "#f5c2e7"
+cyan    = "#94e2d5"
+white   = "#a6adc8"
+
+# -----------------------------
+# Shell
+# -----------------------------
+
+[terminal.shell]
+program = "/usr/bin/zsh"
