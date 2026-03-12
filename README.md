@@ -97,3 +97,4 @@ Wallpapers live at `~/Pictures/Wallpapers/`. The repo contains a `wallpapers/` s
 - AUR packages require an AUR helper — `yay` is installed automatically if not found
 - Spicetify is applied after Spotify install; run `spicetify apply` manually if it fails
 - Gaming: Proton GE can be managed from **ProtonPlus** after install
+- Added Waybar themes and script to change them
