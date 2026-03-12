@@ -7,8 +7,8 @@
 
 ## 📸 Preview
 
-<!-- Add screenshots here -->
-/home/rinooze/Dotfiles3/1
+<!-- /home/rinooze/Dotfiles3/1 -->
+
 
 
 ---
