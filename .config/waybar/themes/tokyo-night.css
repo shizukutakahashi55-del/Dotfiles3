@@ -1,0 +1,106 @@
+/* ============================================================
+ * WAYBAR — Tokyo Night (Shinjuku Lights Edition)
+ * Deep neons, frosted glass, and distinct geometry
+ * ============================================================ */
+
+@define-color bg        #1a1b26;
+@define-color fg        #c0caf5;
+@define-color blue      #7aa2f7;
+@define-color cyan      #7dcfff;
+@define-color purple    #bb9af7;
+@define-color magenta   #bb9af7;
+@define-color pink      #ff007c;
+@define-color red       #f7768e;
+@define-color green     #9ece6a;
+@define-color yellow    #e0af68;
+@define-color orange    #ff9e64;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    border-radius: 0;
+    transition: all 0.25s ease;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+/* -------------------------------------------------------
+ * CONTENEDORES — Geometría distinta a Catppuccin
+ * ------------------------------------------------------- */
+.modules-left, .modules-center, .modules-right {
+    background: alpha(@bg, 0.85);
+    /* Usamos un radio menor para diferenciarlo de las "píldoras" */
+    border-radius: 10px; 
+    margin: 6px 4px;
+    padding: 2px 10px;
+    /* Borde "neón" muy sutil */
+    border: 1px solid alpha(@blue, 0.2);
+    box-shadow: 0 0 12px alpha(@bg, 0.6);
+}
+
+/* -------------------------------------------------------
+ * MÓDULOS — Colores con Brillo (Glow)
+ * ------------------------------------------------------- */
+#custom-power, #clock, #cpu, #memory, #pulseaudio, 
+#network, #bluetooth, #custom-notifications, #tray {
+    padding: 0 10px;
+}
+
+#clock { 
+    color: @blue; 
+    text-shadow: 0 0 8px alpha(@blue, 0.6); 
+}
+
+#cpu { color: @cyan; }
+#memory { color: @purple; }
+#pulseaudio { color: @green; }
+#bluetooth { color: @blue; }
+#network { color: @magenta; }
+#custom-notifications { color: @yellow; }
+
+#custom-power { 
+    color: @red; 
+    text-shadow: 0 0 10px alpha(@red, 0.5);
+}
+
+/* -------------------------------------------------------
+ * SPOTIFY — Tokyo Style
+ * ------------------------------------------------------- */
+#custom-spotify {
+    color: @green;
+    background: alpha(@green, 0.1);
+    border-radius: 8px;
+    padding: 0 15px;
+    margin: 4px;
+    border-right: 3px solid @green; /* Acento asimétrico */
+}
+
+/* -------------------------------------------------------
+ * WORKSPACES — Pacman & Ghosts (Tokyo Edition)
+ * ------------------------------------------------------- */
+#workspaces button {
+    color: alpha(@fg, 0.2);
+    font-size: 16px;
+}
+
+#workspaces button.active {
+    color: @pink; /* Usamos el rosa para que resalte vs Catppuccin */
+    text-shadow: 0 0 10px alpha(@pink, 0.8);
+    background: alpha(@pink, 0.1);
+    border-radius: 6px;
+}
+
+#workspaces button.urgent {
+    color: @red;
+}
+
+/* -------------------------------------------------------
+ * TRAY
+ * ------------------------------------------------------- */
+#tray {
+    color: @fg;
+}

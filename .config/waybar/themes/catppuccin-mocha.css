@@ -1,0 +1,143 @@
+/* ============================================================
+ * WAYBAR — Catppuccin Mocha · Clean Edition (No Shadows)
+ * ============================================================ */
+
+@define-color base      #1e1e2e;
+@define-color mantle    #181825;
+@define-color crust     #11111b;
+@define-color surface0  #313244;
+@define-color surface1  #45475a;
+@define-color surface2  #585b70;
+@define-color overlay0  #6c7086;
+@define-color overlay1  #7f849c;
+@define-color text      #cdd6f4;
+@define-color subtext0  #a6adc8;
+@define-color subtext1  #bac2de;
+@define-color lavender  #b4befe;
+@define-color blue      #89b4fa;
+@define-color sapphire  #74c7ec;
+@define-color sky       #89dceb;
+@define-color teal      #94e2d5;
+@define-color green     #a6e3a1;
+@define-color yellow    #f9e2af;
+@define-color peach     #fab387;
+@define-color maroon    #eba0ac;
+@define-color red       #f38ba8;
+@define-color mauve     #cba6f7;
+@define-color pink      #f5c2e7;
+@define-color flamingo  #f2cdcd;
+@define-color rosewater #f5e0dc;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", monospace;
+    font-size: 12.5px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+}
+
+window#waybar {
+    background: transparent;
+    color: @text;
+}
+
+.modules-left {
+    background: alpha(@mantle, 0.72);
+    border-radius: 999px;
+    padding: 0 6px;
+    margin: 5px 0 5px 6px;
+    border: 1px solid alpha(@mauve, 0.12);
+}
+
+.modules-center {
+    background: alpha(@mantle, 0.9);
+    border-radius: 999px;
+    padding: 0 6px;
+    margin: 5px 0;
+    border: 1px solid alpha(@lavender, 0.14);
+}
+
+.modules-right {
+    background: alpha(@mantle, 0.72);
+    border-radius: 999px;
+    padding: 0 6px;
+    margin: 5px 6px 5px 0;
+    border: 1px solid alpha(@sapphire, 0.10);
+}
+
+#custom-power, #clock, #workspaces, #cpu, #memory,
+#pulseaudio, #bluetooth, #network, #custom-notifications, #tray {
+    padding: 3px 11px;
+    color: @subtext1;
+    border-radius: 999px;
+}
+
+#custom-power { color: @red; font-size: 14px; }
+#clock { color: @lavender; font-weight: 600; }
+#cpu { color: @sapphire; }
+#memory { color: @teal; }
+#pulseaudio { color: @green; }
+#bluetooth { color: @blue; }
+#network { color: @sky; }
+#custom-notifications { color: @mauve; }
+
+#custom-power:hover { background: alpha(@red, 0.14); }
+#clock:hover { background: alpha(@lavender, 0.10); }
+#cpu:hover { background: alpha(@sapphire, 0.10); }
+#memory:hover { background: alpha(@teal, 0.10); }
+#pulseaudio:hover { background: alpha(@green, 0.10); }
+#bluetooth:hover { background: alpha(@blue, 0.10); }
+#network:hover { background: alpha(@sky, 0.10); }
+#custom-notifications:hover { background: alpha(@mauve, 0.10); }
+
+#custom-spotify {
+    background: linear-gradient(90deg, alpha(#1DB954,0.25), alpha(#1DB954,0.10));
+    color: #a6e3a1;
+    border-radius: 999px;
+    padding: 3px 14px;
+    margin: 4px 5px;
+    font-weight: 600;
+    min-width: 220px;
+    border: 1px solid alpha(#1DB954,0.35);
+}
+
+#custom-spotify:hover {
+    background: linear-gradient(90deg, alpha(#1ed760,0.35), alpha(#1DB954,0.18));
+}
+
+#workspaces { padding: 4px 8px; }
+
+#workspaces button {
+    padding: 2px 7px;
+    color: @overlay0;
+    background: transparent;
+    border-radius: 999px;
+    border: none;
+    box-shadow: none;
+    transition: all 0.15s ease;
+    min-width: 0;
+}
+
+#workspaces button:hover { background: alpha(@surface0, 0.6); color: @text; }
+
+#workspaces button.active {
+    background: alpha(@mauve, 0.18);
+    color: @mauve;
+    font-weight: 700;
+    border: 1px solid alpha(@mauve, 0.3);
+}
+
+#workspaces button.urgent { background: alpha(@red, 0.18); color: @red; }
+#workspaces button.persistent { color: @surface1; }
+
+#tray { padding: 3px 8px; }
+
+#privacy { padding: 3px 10px; border-radius: 999px; }
+#privacy-item.screenshare { color: @red; }
+#privacy-item.audio-in { color: @yellow; }
+#privacy-item.video-in { color: @mauve; }
+#privacy:hover { background: alpha(@surface0, 0.5); }

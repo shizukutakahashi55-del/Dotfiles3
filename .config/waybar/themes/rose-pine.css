@@ -1,0 +1,109 @@
+/* ============================================================
+ * WAYBAR — Rosé Pine (Authentic & Deep Edition)
+ * ============================================================ */
+
+/* Paleta oficial ajustada para mayor profundidad */
+@define-color base      #191724;
+@define-color surface   #1f1d2e;
+@define-color overlay   #26233a;
+@define-color muted     #6e6a86;
+@define-color text      #e0def4;
+@define-color love      #eb6f92; /* El rosa característico */
+@define-color gold      #f6c177;
+@define-color rose      #ebbcba; /* El tono crema/rosa suave */
+@define-color pine      #31748f; /* El azul petróleo */
+@define-color foam      #9ccfd8; /* El turquesa */
+@define-color iris      #c4a7e7; /* El lila */
+@define-color highlight #2a2837;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", monospace;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    border-radius: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+window#waybar {
+    background: transparent;
+}
+
+/* -------------------------------------------------------
+ * CONTENEDORES — Estética "Glass" Oscura
+ * ------------------------------------------------------- */
+.modules-left, .modules-center, .modules-right {
+    background: alpha(@base, 0.85);
+    border-radius: 14px;
+    padding: 2px 8px;
+    margin: 6px 4px;
+    /* Un borde sutil que le da el toque "pro" */
+    border: 1px solid alpha(@iris, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* -------------------------------------------------------
+ * MÓDULOS
+ * ------------------------------------------------------- */
+#custom-power, #clock, #cpu, #memory, #pulseaudio, 
+#network, #bluetooth, #custom-notifications, #tray {
+    padding: 0 10px;
+    margin: 4px 2px;
+}
+
+/* Aplicando el alma de Rosé Pine a los iconos */
+#custom-power { color: @love; font-size: 15px; }
+#clock        { color: @rose; font-weight: 700; }
+#cpu          { color: @foam; }
+#memory       { color: @gold; }
+#pulseaudio   { color: @iris; }
+#bluetooth    { color: @foam; }
+#network      { color: @pine; }
+#custom-notifications { color: @love; }
+
+/* Efectos de Hover elegantes */
+#cpu:hover, #memory:hover, #pulseaudio:hover, #network:hover {
+    background: alpha(@iris, 0.1);
+    border-radius: 8px;
+}
+
+/* -------------------------------------------------------
+ * SPOTIFY — Estilo Rosé Pine (Nada de verde neón)
+ * ------------------------------------------------------- */
+#custom-spotify {
+    background: alpha(@pine, 0.15);
+    color: @foam;
+    border-radius: 10px;
+    padding: 0 15px;
+    margin: 5px 8px;
+    border: 1px solid alpha(@pine, 0.3);
+    font-style: italic;
+}
+
+/* -------------------------------------------------------
+ * WORKSPACES — El estilo de los "Ghosts"
+ * ------------------------------------------------------- */
+#workspaces button {
+    color: @muted;
+    font-size: 14px;
+    padding: 0 6px;
+}
+
+#workspaces button.active {
+    color: @love;
+    background: alpha(@love, 0.12);
+    border-radius: 10px;
+    /* El pacman ahora brilla con el color principal del tema */
+    text-shadow: 0 0 8px alpha(@love, 0.6); 
+}
+
+#workspaces button.urgent {
+    color: @gold;
+}
+
+/* -------------------------------------------------------
+ * TRAY
+ * ------------------------------------------------------- */
+#tray {
+    color: @text;
+}

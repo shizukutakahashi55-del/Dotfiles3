@@ -1,337 +1,389 @@
 #!/usr/bin/env python3
 # ============================================================
-#  wallpaper-picker.py — rinooze
-#  Catppuccin Mocha wallpaper switcher for hyprpaper
-#  Carga lazy de thumbnails para apertura instantánea
+#  wallpaper-picker.py — rinooze · GTK4
+#  Catppuccin Mocha · Purple · Paginación 3 en 3
 # ============================================================
 
 import gi
-gi.require_version("Gtk", "3.0")
+gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, GdkPixbuf, GLib, Gdk
-import os
-import subprocess
-import threading
-import json
+import os, subprocess, threading, json, hashlib
 
-WALLPAPER_DIR = os.path.expanduser("~/Pictures/Wallpapers")
+WALLPAPER_DIR  = os.path.expanduser("~/Pictures/Wallpapers")
 HYPRPAPER_CONF = os.path.expanduser("~/.config/hypr/hyprpaper.conf")
-SUPPORTED_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
-THUMB_W, THUMB_H = 220, 138
+SUPPORTED      = (".jpg", ".jpeg", ".png", ".webp", ".gif")
+PAGE_SIZE      = 3
+THUMB_W, THUMB_H = 600, 338
 
 CSS = """
-* { font-family: 'JetBrainsMono Nerd Font', monospace; }
+* { font-family: 'JetBrainsMono Nerd Font', 'Noto Mono', monospace; }
 window { background-color: #1e1e2e; color: #cdd6f4; }
-#header { background-color: #181825; border-bottom: 1px solid #313244; padding: 16px 24px; }
-#title { font-size: 18px; font-weight: bold; color: #cba6f7; letter-spacing: 2px; }
-#subtitle { font-size: 11px; color: #6c7086; margin-top: 2px; }
-#scrolled { background-color: #1e1e2e; }
-#grid { background-color: #1e1e2e; padding: 24px; }
-.wallpaper-item { background-color: #181825; border-radius: 12px; border: 2px solid #313244; margin: 8px; }
-.wallpaper-item:hover { border-color: #cba6f7; background-color: #24273a; }
-.wallpaper-item.selected { border-color: #cba6f7; background-color: #2a2a3e; }
-.wallpaper-name { font-size: 11px; color: #bac2de; padding: 6px 8px; }
-#confirm-dialog { background-color: #1e1e2e; border: 1px solid #313244; padding: 24px; }
-#confirm-title { font-size: 15px; font-weight: bold; color: #cdd6f4; margin-bottom: 8px; }
-#confirm-subtitle { font-size: 12px; color: #6c7086; margin-bottom: 20px; }
-button { border-radius: 8px; padding: 8px 20px; font-size: 13px; border: none; }
-#btn-confirm { background-color: #cba6f7; color: #1e1e2e; font-weight: bold; }
-#btn-confirm:hover { background-color: #d0b4fa; }
-#btn-cancel { background-color: #313244; color: #cdd6f4; }
-#btn-cancel:hover { background-color: #45475a; }
-#statusbar { background-color: #181825; border-top: 1px solid #313244; padding: 8px 24px; font-size: 11px; color: #6c7086; }
-.loading-placeholder { background-color: #313244; border-radius: 8px; }
-scrollbar { background-color: #1e1e2e; border: none; }
-scrollbar slider { background-color: #313244; border-radius: 4px; min-width: 6px; min-height: 6px; }
-scrollbar slider:hover { background-color: #cba6f7; }
+
+.header {
+    background-color: #181825;
+    border-bottom: 1px solid #2a2840;
+    padding: 12px 16px 10px 16px;
+}
+.title { font-size: 14px; font-weight: bold; color: #cba6f7; letter-spacing: 3px; }
+.subtitle { font-size: 9px; color: #6c7086; margin-top: 2px; }
+
+/* Grid */
+.grid-area { background-color: #1e1e2e; padding: 10px 8px; }
+
+.card {
+    background-color: #181825;
+    border-radius: 10px;
+    border: 2px solid #313244;
+    padding: 0;
+}
+.card:hover  { border-color: #585b70; }
+.card.active { border-color: #cba6f7; background-color: #211d33; }
+
+picture { border-radius: 8px; }
+
+.card-label {
+    font-size: 9px; color: #a6adc8;
+    padding: 2px 6px 3px 6px;
+    background-color: #000000aa;
+    border-radius: 0 0 8px 8px;
+}
+.card-label-active {
+    font-size: 9px; color: #cba6f7; font-weight: bold;
+    padding: 2px 6px 3px 6px;
+    background-color: #000000cc;
+    border-radius: 0 0 8px 8px;
+}
+
+/* Barra de paginación */
+.pagination {
+    background-color: #181825;
+    border-top: 1px solid #2a2840;
+    padding: 8px 16px;
+}
+.page-info { font-size: 10px; color: #6c7086; }
+
+.btn-page {
+    background-color: #313244;
+    color: #a6adc8;
+    border-radius: 8px;
+    padding: 5px 16px;
+    font-size: 11px;
+    border: none;
+    min-width: 0;
+}
+.btn-page:hover { background-color: #45475a; color: #cdd6f4; }
+.btn-page:disabled { background-color: #1e1e2e; color: #45475a; }
+
+/* Statusbar */
+.statusbar {
+    background-color: #13111e;
+    padding: 4px 14px;
+    font-size: 9px; color: #6c7086;
+    border-top: 1px solid #2a2840;
+}
+
+/* Dialog */
+.dialog-outer {
+    background-color: #1e1e2e;
+    border: 2px solid #cba6f755;
+    border-radius: 14px;
+}
+.dialog-box { padding: 22px; }
+.dialog-title { font-size: 13px; font-weight: bold; color: #cdd6f4; }
+.dialog-sub   { font-size: 10px; color: #6c7086; margin-top: 2px; }
+.btn-confirm {
+    background-color: #cba6f7; color: #1e1e2e; font-weight: bold;
+    border-radius: 8px; padding: 7px 20px; font-size: 11px; border: none;
+}
+.btn-confirm:hover { background-color: #d0b4fa; }
+.btn-cancel {
+    background-color: #313244; color: #a6adc8;
+    border-radius: 8px; padding: 7px 20px; font-size: 11px; border: none;
+}
+.btn-cancel:hover { background-color: #45475a; }
 """
 
-class WallpaperPicker(Gtk.Window):
-    def __init__(self):
-        super().__init__(title="Wallpaper Picker")
-        self.set_wmclass("wallpaper-picker", "wallpaper-picker")
-        self.set_default_size(1000, 620)
-        self.set_resizable(True)
-        self.selected_path = None
-        self.selected_button = None
-        self._pending_files = []
+class WallpaperPicker(Gtk.ApplicationWindow):
+    def __init__(self, app):
+        super().__init__(application=app, title="Wallpaper Picker")
+        self.set_default_size(1020, 420)
+        self.set_size_request(600, 340)
 
-        css_provider = Gtk.CssProvider()
-        css_provider.load_from_data(CSS.encode())
-        Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(),
-            css_provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-        )
+        self._files          = []
+        self._page           = 0
+        self._selected_btn   = None
+        self._selected_path  = None
 
+        self._apply_css()
         self._build_ui()
-        self._scan_and_build_placeholders()
+        GLib.idle_add(self._scan_files)
+
+    def _apply_css(self):
+        p = Gtk.CssProvider()
+        p.load_from_data(CSS.encode())
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(), p,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     def _build_ui(self):
-        main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.add(main_box)
+        root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.set_child(root)
 
-        header = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        header.set_name("header")
-        title = Gtk.Label(label="WALLPAPER PICKER")
-        title.set_name("title")
-        title.set_halign(Gtk.Align.START)
-        subtitle = Gtk.Label(label=f"📁 {WALLPAPER_DIR}")
-        subtitle.set_name("subtitle")
-        subtitle.set_halign(Gtk.Align.START)
-        header.pack_start(title, False, False, 0)
-        header.pack_start(subtitle, False, False, 0)
-        main_box.pack_start(header, False, False, 0)
+        # Header
+        hdr = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        hdr.add_css_class("header")
+        t = Gtk.Label(label="WALLPAPER PICKER")
+        t.add_css_class("title"); t.set_halign(Gtk.Align.START)
+        s = Gtk.Label(label=f"  {WALLPAPER_DIR}")
+        s.add_css_class("subtitle"); s.set_halign(Gtk.Align.START)
+        hdr.append(t); hdr.append(s)
+        root.append(hdr)
 
-        self.scrolled = Gtk.ScrolledWindow()
-        self.scrolled.set_name("scrolled")
-        self.scrolled.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER)
-        self.scrolled.set_vexpand(True)
+        # Grid 3 columnas fijas
+        self._grid = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self._grid.add_css_class("grid-area")
+        self._grid.set_vexpand(True)
+        self._grid.set_hexpand(True)
+        self._grid.set_homogeneous(True)
+        self._grid.set_margin_start(8)
+        self._grid.set_margin_end(8)
+        self._grid.set_margin_top(8)
+        self._grid.set_margin_bottom(8)
+        root.append(self._grid)
 
-        self.grid = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        self.grid.set_name("grid")
-        self.scrolled.add(self.grid)
-        main_box.pack_start(self.scrolled, True, True, 0)
+        # Paginación
+        pag = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        pag.add_css_class("pagination")
+        pag.set_spacing(10)
 
-        self.statusbar = Gtk.Label(label="Cargando wallpapers...")
-        self.statusbar.set_name("statusbar")
-        self.statusbar.set_halign(Gtk.Align.START)
-        main_box.pack_start(self.statusbar, False, False, 0)
+        self._btn_prev = Gtk.Button(label="← Anterior")
+        self._btn_prev.add_css_class("btn-page")
+        self._btn_prev.connect("clicked", lambda *_: self._go(-1))
 
-    def _scan_and_build_placeholders(self):
-        """Abre la ventana inmediatamente con placeholders, luego carga thumbs en background."""
-        if not os.path.exists(WALLPAPER_DIR):
-            os.makedirs(WALLPAPER_DIR)
-            self.statusbar.set_text("⚠ Carpeta creada — agrega wallpapers en ~/Pictures/Wallpapers")
-            return
+        self._page_lbl = Gtk.Label(label="")
+        self._page_lbl.add_css_class("page-info")
+        self._page_lbl.set_hexpand(True)
+        self._page_lbl.set_halign(Gtk.Align.CENTER)
 
-        files = sorted([
-            f for f in os.listdir(WALLPAPER_DIR)
-            if f.lower().endswith(SUPPORTED_EXTENSIONS)
-        ])
+        self._btn_next = Gtk.Button(label="Siguiente →")
+        self._btn_next.add_css_class("btn-page")
+        self._btn_next.connect("clicked", lambda *_: self._go(+1))
 
-        if not files:
-            self.statusbar.set_text("⚠ No se encontraron imágenes en ~/Pictures/Wallpapers")
-            return
+        pag.append(self._btn_prev)
+        pag.append(self._page_lbl)
+        pag.append(self._btn_next)
+        root.append(pag)
 
-        self._pending_files = list(files)
-        self._buttons = {}
+        # Statusbar
+        self._status = Gtk.Label(label="Iniciando…")
+        self._status.add_css_class("statusbar")
+        self._status.set_halign(Gtk.Align.START)
+        root.append(self._status)
 
-        # Crear placeholders instantáneamente (sin leer imágenes)
-        for filename in files:
-            path = os.path.join(WALLPAPER_DIR, filename)
-            btn, img_widget = self._add_placeholder_card(path, filename)
-            self._buttons[filename] = (btn, img_widget, path)
-
-        self.grid.show_all()
-        self.statusbar.set_text(f"⏳ Cargando {len(files)} wallpapers...")
-
-        # Cargar thumbnails en background
-        threading.Thread(target=self._load_thumbs_background, daemon=True).start()
-
-    def _add_placeholder_card(self, path, filename):
-        """Crea una tarjeta con placeholder gris, sin leer la imagen."""
-        btn = Gtk.Button()
-        btn.set_relief(Gtk.ReliefStyle.NONE)
-        btn.get_style_context().add_class("wallpaper-item")
-
-        inner = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-
-        # Placeholder gris del tamaño del thumbnail
-        placeholder = Gtk.DrawingArea()
-        placeholder.set_size_request(THUMB_W, THUMB_H)
-        placeholder.get_style_context().add_class("loading-placeholder")
-        placeholder.set_margin_top(10)
-        placeholder.set_margin_start(10)
-        placeholder.set_margin_end(10)
-
-        name = os.path.splitext(filename)[0]
-        if len(name) > 22:
-            name = name[:20] + "…"
-        label = Gtk.Label(label=name)
-        label.set_name("wallpaper-name")
-        label.set_margin_bottom(8)
-
-        inner.pack_start(placeholder, False, False, 0)
-        inner.pack_start(label, False, False, 0)
-        btn.add(inner)
-        btn.connect("clicked", self._on_wallpaper_clicked, path, filename)
-
-        self.grid.pack_start(btn, False, False, 0)
-        return btn, placeholder
-
-    def _load_thumbs_background(self):
-        """Carga thumbnails uno por uno en background y actualiza la UI."""
-        loaded = 0
-        total = len(self._pending_files)
-
-        for filename in self._pending_files:
-            btn, placeholder, path = self._buttons[filename]
-            try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, THUMB_W, THUMB_H, True)
-                # Programar actualización en el hilo principal de GTK
-                GLib.idle_add(self._replace_placeholder, btn, placeholder, pixbuf, path, filename)
-            except Exception:
-                pass
-            loaded += 1
-            GLib.idle_add(
-                self.statusbar.set_text,
-                f"⏳ Cargando miniaturas... {loaded}/{total}"
-            )
-
-        GLib.idle_add(
-            self.statusbar.set_text,
-            f"✓ {total} wallpapers listos — clic para seleccionar"
-        )
-
-    def _replace_placeholder(self, btn, placeholder, pixbuf, path, filename):
-        """Reemplaza el placeholder con la imagen real (corre en hilo GTK)."""
-        inner = btn.get_child()
-        if inner is None:
+    # ── Escanear archivos ─────────────────────────────────────
+    def _scan_files(self):
+        if not os.path.isdir(WALLPAPER_DIR):
+            os.makedirs(WALLPAPER_DIR, exist_ok=True)
+            self._set_status("⚠  Agrega wallpapers en ~/Pictures/Wallpapers")
             return False
 
-        children = inner.get_children()
-        if children:
-            inner.remove(children[0])  # Quitar placeholder
+        self._files = sorted([
+            os.path.join(WALLPAPER_DIR, f)
+            for f in os.listdir(WALLPAPER_DIR)
+            if f.lower().endswith(SUPPORTED)
+        ])
 
-        img = Gtk.Image.new_from_pixbuf(pixbuf)
-        img.set_margin_top(10)
-        img.set_margin_start(10)
-        img.set_margin_end(10)
-        inner.pack_start(img, False, False, 0)
-        inner.reorder_child(img, 0)
-        img.show()
-        return False  # No repetir el idle_add
+        if not self._files:
+            self._set_status("⚠  No se encontraron imágenes")
+            return False
 
-    def _on_wallpaper_clicked(self, btn, path, filename):
-        if self.selected_button:
-            self.selected_button.get_style_context().remove_class("selected")
-        self.selected_button = btn
-        btn.get_style_context().add_class("selected")
-        self.selected_path = path
-        self._show_confirm_dialog(path, filename)
+        self._render_page()
+        return False
 
-    def _show_confirm_dialog(self, path, filename):
-        dialog = Gtk.Dialog(transient_for=self, modal=True)
-        dialog.set_decorated(False)
-        dialog.set_resizable(False)
+    # ── Renderizar página actual ──────────────────────────────
+    def _render_page(self):
+        # Limpiar grid
+        while True:
+            child = self._grid.get_first_child()
+            if child is None: break
+            self._grid.remove(child)
 
-        area = dialog.get_content_area()
-        area.set_spacing(0)
+        total_pages = self._total_pages()
+        start = self._page * PAGE_SIZE
+        page_files = self._files[start:start + PAGE_SIZE]
 
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        box.set_name("confirm-dialog")
-        box.set_margin_top(8)
-        box.set_margin_bottom(8)
-        box.set_margin_start(8)
-        box.set_margin_end(8)
+        for path in page_files:
+            fn  = os.path.basename(path)
+            btn = self._make_card(fn, path)
+            # Restaurar selección visual si corresponde
+            if path == self._selected_path:
+                btn.add_css_class("active")
+                self._selected_btn = btn
+                self._lbl_style(btn, True)
+            self._grid.append(btn)
+
+        # Rellenar con espacios vacíos si la página no está completa
+        for _ in range(PAGE_SIZE - len(page_files)):
+            spacer = Gtk.Box()
+            spacer.set_hexpand(True)
+            self._grid.append(spacer)
+
+        # Actualizar controles
+        cur  = self._page + 1
+        tot  = total_pages
+        self._page_lbl.set_label(f"{cur} / {tot}   ·   {len(self._files)} wallpapers")
+        self._btn_prev.set_sensitive(self._page > 0)
+        self._btn_next.set_sensitive(self._page < total_pages - 1)
+        self._set_status(
+            f"✓  Mostrando {start+1}–{min(start+PAGE_SIZE, len(self._files))} de {len(self._files)}"
+        )
+
+    def _total_pages(self):
+        return max(1, (len(self._files) + PAGE_SIZE - 1) // PAGE_SIZE)
+
+    def _go(self, direction):
+        new_page = self._page + direction
+        if 0 <= new_page < self._total_pages():
+            self._page = new_page
+            self._selected_btn = None  # reset visual, path se mantiene
+            self._render_page()
+
+    # ── Card ──────────────────────────────────────────────────
+    def _make_card(self, fn, path):
+        btn = Gtk.Button()
+        btn.add_css_class("card")
+        btn.set_name(path)
+        btn.connect("clicked", self._on_click, path, fn)
+        btn.set_hexpand(True)
+        btn.set_vexpand(True)
+
+        overlay = Gtk.Overlay()
+        overlay.set_hexpand(True)
+        overlay.set_vexpand(True)
+
+        pic = Gtk.Picture.new_for_filename(path)
+        pic.set_content_fit(Gtk.ContentFit.COVER)
+        pic.set_hexpand(True)
+        pic.set_vexpand(True)
+        pic.set_can_shrink(True)
+        overlay.set_child(pic)
+
+        name = os.path.splitext(fn)[0]
+        name = (name[:30] + "…") if len(name) > 31 else name
+        lbl  = Gtk.Label(label=name)
+        lbl.add_css_class("card-label")
+        lbl.set_halign(Gtk.Align.START)
+        lbl.set_valign(Gtk.Align.END)
+        overlay.add_overlay(lbl)
+
+        btn.set_child(overlay)
+        return btn
+
+    # ── Selección ─────────────────────────────────────────────
+    def _on_click(self, btn, path, fn):
+        if self._selected_btn:
+            self._selected_btn.remove_css_class("active")
+            self._lbl_style(self._selected_btn, False)
+        self._selected_btn  = btn
+        self._selected_path = path
+        btn.add_css_class("active")
+        self._lbl_style(btn, True)
+        self._show_confirm(path, fn)
+
+    def _lbl_style(self, btn, sel):
+        overlay = btn.get_child()
+        if not overlay: return
+        lbl = overlay.get_last_child()
+        if not isinstance(lbl, Gtk.Label): return
+        if sel:
+            lbl.remove_css_class("card-label")
+            lbl.add_css_class("card-label-active")
+        else:
+            lbl.remove_css_class("card-label-active")
+            lbl.add_css_class("card-label")
+
+    # ── Confirm dialog ────────────────────────────────────────
+    def _show_confirm(self, path, fn):
+        dlg = Gtk.Window(transient_for=self, modal=True)
+        dlg.set_decorated(False); dlg.set_resizable(False)
+        outer = Gtk.Box(); outer.add_css_class("dialog-outer")
+        box   = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        box.add_css_class("dialog-box")
+        outer.append(box); dlg.set_child(outer)
 
         try:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 400, 220, True)
-            preview = Gtk.Image.new_from_pixbuf(pixbuf)
-            preview.set_margin_bottom(16)
-            box.pack_start(preview, False, False, 0)
-        except Exception:
-            pass
+            pb  = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 480, 270, True)
+            pic = Gtk.Picture.new_for_pixbuf(pb)
+            pic.set_content_fit(Gtk.ContentFit.CONTAIN)
+            pic.set_size_request(480, 270)
+            pic.set_margin_bottom(4)
+            box.append(pic)
+        except: pass
 
-        title = Gtk.Label(label="¿Aplicar este wallpaper?")
-        title.set_name("confirm-title")
-        title.set_halign(Gtk.Align.CENTER)
+        tl = Gtk.Label(label="¿Aplicar este wallpaper?")
+        tl.add_css_class("dialog-title"); tl.set_halign(Gtk.Align.CENTER)
+        sl = Gtk.Label(label=fn)
+        sl.add_css_class("dialog-sub"); sl.set_halign(Gtk.Align.CENTER)
+        box.append(tl); box.append(sl)
 
-        name_label = Gtk.Label(label=filename)
-        name_label.set_name("confirm-subtitle")
-        name_label.set_halign(Gtk.Align.CENTER)
+        btns = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        btns.set_halign(Gtk.Align.CENTER); btns.set_margin_top(8)
+        bc = Gtk.Button(label="  Cancelar"); bc.add_css_class("btn-cancel")
+        bc.connect("clicked", lambda *_: dlg.close())
+        bo = Gtk.Button(label="✓  Aplicar"); bo.add_css_class("btn-confirm")
+        bo.connect("clicked", lambda *_: (dlg.close(), self._apply(path)))
+        btns.append(bc); btns.append(bo); box.append(btns)
 
-        box.pack_start(title, False, False, 0)
-        box.pack_start(name_label, False, False, 0)
+        kc = Gtk.EventControllerKey()
+        kc.connect("key-pressed",
+                   lambda c, kv, *_: dlg.close() if kv == Gdk.KEY_Escape else None)
+        dlg.add_controller(kc)
+        dlg.present()
 
-        btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
-        btn_box.set_halign(Gtk.Align.CENTER)
-        btn_box.set_margin_top(8)
-
-        btn_cancel = Gtk.Button(label="Cancelar")
-        btn_cancel.set_name("btn-cancel")
-        btn_cancel.connect("clicked", lambda w: dialog.response(Gtk.ResponseType.CANCEL))
-
-        btn_ok = Gtk.Button(label="✓ Sí, aplicar")
-        btn_ok.set_name("btn-confirm")
-        btn_ok.connect("clicked", lambda w: dialog.response(Gtk.ResponseType.OK))
-
-        btn_box.pack_start(btn_cancel, False, False, 0)
-        btn_box.pack_start(btn_ok, False, False, 0)
-        box.pack_start(btn_box, False, False, 0)
-
-        area.pack_start(box, True, True, 0)
-        dialog.show_all()
-
-        response = dialog.run()
-        dialog.destroy()
-
-        if response == Gtk.ResponseType.OK:
-            self._apply_wallpaper(path)
-
-    def _apply_wallpaper(self, path):
-        self.statusbar.set_text("⏳ Aplicando wallpaper...")
-
-        def apply():
+    # ── Apply ─────────────────────────────────────────────────
+    def _apply(self, path):
+        self._set_status("⏳  Aplicando…")
+        def worker():
             try:
-                subprocess.run(["hyprctl", "hyprpaper", "preload", path], capture_output=True)
-                monitors_result = subprocess.run(
-                    ["hyprctl", "monitors", "-j"], capture_output=True, text=True
-                )
-                monitors = json.loads(monitors_result.stdout)
-                for monitor in monitors:
-                    name = monitor.get("name", "")
+                subprocess.run(["hyprctl", "hyprpaper", "preload", path],
+                               capture_output=True)
+                res = subprocess.run(["hyprctl", "monitors", "-j"],
+                                     capture_output=True, text=True)
+                for m in json.loads(res.stdout):
                     subprocess.run(
-                        ["hyprctl", "hyprpaper", "wallpaper", f"{name},{path}"],
-                        capture_output=True
-                    )
+                        ["hyprctl", "hyprpaper", "wallpaper",
+                         f"{m.get('name','')},{path}"], capture_output=True)
                 self._update_conf(path)
-                GLib.idle_add(
-                    self.statusbar.set_text,
-                    f"✓ Wallpaper aplicado: {os.path.basename(path)}"
-                )
+                GLib.idle_add(self._set_status,
+                              f"✓  Aplicado: {os.path.basename(path)}")
             except Exception as e:
-                GLib.idle_add(self.statusbar.set_text, f"✗ Error: {e}")
-
-        threading.Thread(target=apply, daemon=True).start()
+                GLib.idle_add(self._set_status, f"✗  {e}")
+        threading.Thread(target=worker, daemon=True).start()
 
     def _update_conf(self, path):
         try:
-            with open(HYPRPAPER_CONF, "r") as f:
-                lines = f.readlines()
-
-            new_lines = []
-            preload_written = False
-            wallpaper_written = False
-
+            with open(HYPRPAPER_CONF) as f: lines = f.readlines()
+            out = []; pre = wall = False
             for line in lines:
-                if line.strip().startswith("preload"):
-                    if not preload_written:
-                        new_lines.append(f"preload = {path}\n")
-                        preload_written = True
-                elif line.strip().startswith("wallpaper"):
-                    if not wallpaper_written:
-                        new_lines.append(f"wallpaper = ,{path}\n")
-                        wallpaper_written = True
-                else:
-                    new_lines.append(line)
+                s = line.strip()
+                if s.startswith("preload") and not pre:
+                    out.append(f"preload = {path}\n"); pre = True
+                elif s.startswith("wallpaper") and not wall:
+                    out.append(f"wallpaper = ,{path}\n"); wall = True
+                else: out.append(line)
+            if not pre:  out.insert(0, f"preload = {path}\n")
+            if not wall: out.append(f"wallpaper = ,{path}\n")
+            with open(HYPRPAPER_CONF, "w") as f: f.writelines(out)
+        except Exception as e: print(f"[conf] {e}")
 
-            if not preload_written:
-                new_lines.insert(0, f"preload = {path}\n")
-            if not wallpaper_written:
-                new_lines.append(f"wallpaper = ,{path}\n")
-
-            with open(HYPRPAPER_CONF, "w") as f:
-                f.writelines(new_lines)
-        except Exception as e:
-            print(f"Error actualizando conf: {e}")
+    def _set_status(self, msg):
+        self._status.set_label(msg); return False
 
 
 def main():
-    win = WallpaperPicker()
-    win.connect("destroy", Gtk.main_quit)
-    win.show_all()
-    Gtk.main()
+    app = Gtk.Application(application_id="io.rinooze.WallpaperPicker")
+    app.connect("activate", lambda a: WallpaperPicker(a).present())
+    app.run(None)
 
 if __name__ == "__main__":
     main()

@@ -13,56 +13,53 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 
-setopt HIST_IGNORE_DUPS       # No guardar duplicados consecutivos
-setopt HIST_IGNORE_ALL_DUPS   # Borrar duplicados anteriores
-setopt HIST_FIND_NO_DUPS      # No mostrar duplicados al buscar
-setopt HIST_SAVE_NO_DUPS      # No guardar duplicados en archivo
-setopt SHARE_HISTORY          # Compartir historial entre terminales
-setopt APPEND_HISTORY         # Agregar al historial, no sobreescribir
-setopt INC_APPEND_HISTORY     # Guardar al ejecutar, no al cerrar
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
 
 # ── Opciones generales ────────────────────────────────────────
-setopt AUTO_CD                # cd sin escribir 'cd'
-setopt CORRECT                # Corrección de typos
-setopt EXTENDED_GLOB          # Globbing extendido
-setopt NO_BEEP                # Sin pitidos
+setopt AUTO_CD
+setopt CORRECT
+setopt EXTENDED_GLOB
+setopt NO_BEEP
 
 # ── Autocompletado ────────────────────────────────────────────
 autoload -Uz compinit
 compinit
 
-setopt MENU_COMPLETE          # Autocompletar directamente
-setopt AUTO_LIST              # Listar opciones automáticamente
-setopt COMPLETE_IN_WORD       # Completar dentro de palabras
-setopt ALWAYS_TO_END          # Mover cursor al final al completar
+setopt MENU_COMPLETE
+setopt AUTO_LIST
+setopt COMPLETE_IN_WORD
+setopt ALWAYS_TO_END
 
 zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case insensitive
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*:descriptions' format '%F{#cba6f7}-- %d --%f'
-zstyle ':completion:*:messages' format '%F{#a6e3a1}-- %d --%f'
-zstyle ':completion:*:warnings' format '%F{#f38ba8}-- sin resultados --%f'
-zstyle ':completion:*:corrections' format '%F{#fab387}-- %d (errores: %e) --%f'
+zstyle ':completion:*:messages'     format '%F{#a6e3a1}-- %d --%f'
+zstyle ':completion:*:warnings'     format '%F{#f38ba8}-- sin resultados --%f'
+zstyle ':completion:*:corrections'  format '%F{#fab387}-- %d (errores: %e) --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' special-dirs true
 
-# ── Plugins (via zsh nativo, sin oh-my-zsh) ───────────────────
-# Autosuggestions (memoria de comandos)
+# ── Plugins ───────────────────────────────────────────────────
 if [[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 elif [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
     source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
-# Syntax highlighting
 if [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 elif [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
-# History substring search (flechas para buscar en historial)
 if [[ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ]]; then
     source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
     bindkey '^[[A' history-substring-search-up
@@ -70,32 +67,25 @@ if [[ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substri
 fi
 
 # ── Colores Catppuccin Mocha ──────────────────────────────────
-# Palette
-CATT_ROSEWATER="%F{#f5e0dc}"
-CATT_FLAMINGO="%F{#f2cdcd}"
-CATT_PINK="%F{#f5c2e7}"
 CATT_MAUVE="%F{#cba6f7}"
 CATT_RED="%F{#f38ba8}"
-CATT_MAROON="%F{#eba0ac}"
-CATT_PEACH="%F{#fab387}"
 CATT_YELLOW="%F{#f9e2af}"
 CATT_GREEN="%F{#a6e3a1}"
 CATT_TEAL="%F{#94e2d5}"
 CATT_SKY="%F{#89dceb}"
 CATT_SAPPHIRE="%F{#74c7ec}"
 CATT_BLUE="%F{#89b4fa}"
-CATT_LAVENDER="%F{#b4befe}"
 CATT_TEXT="%F{#cdd6f4}"
 CATT_SUBTEXT="%F{#bac2de}"
 CATT_OVERLAY="%F{#6c7086}"
 RESET="%f"
 
-# ── Autosuggestions — colores Catppuccin ─────────────────────
+# ── Autosuggestions ───────────────────────────────────────────
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c7086"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
-# ── Syntax highlighting — colores Catppuccin ─────────────────
+# ── Syntax highlighting ───────────────────────────────────────
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[command]='fg=#a6e3a1'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=#89b4fa'
@@ -112,31 +102,65 @@ ZSH_HIGHLIGHT_STYLES[comment]='fg=#6c7086,italic'
 ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#89dceb'
 ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#89dceb'
 
-# ── Prompt (Catppuccin Mocha) ─────────────────────────────────
+# ── Prompt ────────────────────────────────────────────────────
 autoload -Uz vcs_info
-precmd() { vcs_info }
-
-zstyle ':vcs_info:git:*' formats "${CATT_MAUVE} %b${RESET}"
-zstyle ':vcs_info:*' enable git
-
 setopt PROMPT_SUBST
 
-# Prompt: user@host dir branch ❯
-PROMPT='${CATT_BLUE}%n${RESET}${CATT_OVERLAY}@${RESET}${CATT_SAPPHIRE}%m${RESET} ${CATT_YELLOW}%~${RESET}${vcs_info_msg_0_} ${CATT_MAUVE}❯${RESET} '
+# Git: rama + estado dirty
+zstyle ':vcs_info:*'      enable git
+zstyle ':vcs_info:git:*'  check-for-changes true
+zstyle ':vcs_info:git:*'  stagedstr     '%F{#a6e3a1}●%f'
+zstyle ':vcs_info:git:*'  unstagedstr   '%F{#fab387}●%f'
+zstyle ':vcs_info:git:*'  formats       ' %F{#cba6f7} %b%f%c%u'
+zstyle ':vcs_info:git:*'  actionformats ' %F{#f38ba8} %b%f %F{#fab387}(%a)%f'
 
-# Prompt de la derecha: hora
-RPROMPT='${CATT_OVERLAY}%T${RESET}'
+# Último exit code
+_prompt_status() {
+    local code=$?
+    if [[ $code -ne 0 ]]; then
+        echo " %F{#f38ba8}✘ ${code}%f"
+    fi
+}
+
+# Tiempo de ejecución del último comando
+_cmd_start_time=0
+preexec() { _cmd_start_time=$SECONDS }
+
+_cmd_elapsed() {
+    local elapsed=$(( SECONDS - _cmd_start_time ))
+    if (( elapsed >= 3 )); then
+        if (( elapsed >= 60 )); then
+            echo " %F{#6c7086}󱦟 $((elapsed/60))m$((elapsed%60))s%f"
+        else
+            echo " %F{#6c7086}󱦟 ${elapsed}s%f"
+        fi
+    fi
+}
+
+precmd() {
+    vcs_info
+    # Línea separadora sutil entre comandos
+    print -P "%F{#313244}%f"
+}
+
+# Prompt multilinea:
+# ╭─ 󰊠 user @ host  ~/path  branch ●
+# ╰─ ❯
+PROMPT='%F{#45475a}╭─%f %F{#cba6f7}󰊠%f %F{#89b4fa}%n%f%F{#6c7086}@%f%F{#74c7ec}%m%f  %F{#f9e2af}%~%f${vcs_info_msg_0_}$(_prompt_status)$(_cmd_elapsed)
+%F{#45475a}╰─%f %(?.%F{#a6e3a1}.%F{#f38ba8})❯%f '
+
+RPROMPT='%F{#45475a}%T%f'
 
 # ── Keybindings ───────────────────────────────────────────────
-bindkey -e                          # Modo emacs (compatible con terminales)
-bindkey '^[[H'  beginning-of-line   # Home
-bindkey '^[[F'  end-of-line         # End
-bindkey '^[[3~' delete-char         # Delete
-bindkey '^[[1;5C' forward-word      # Ctrl+→
-bindkey '^[[1;5D' backward-word     # Ctrl+←
-bindkey '^R'    history-incremental-search-backward  # Ctrl+R buscar historial
+bindkey -e
+bindkey '^[[H'    beginning-of-line
+bindkey '^[[F'    end-of-line
+bindkey '^[[3~'   delete-char
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
+bindkey '^R'      history-incremental-search-backward
 
-# ── Aliases útiles ────────────────────────────────────────────
+# ── Aliases ───────────────────────────────────────────────────
 alias ls='ls --color=auto'
 alias ll='ls -lah --color=auto'
 alias la='ls -A --color=auto'
@@ -156,15 +180,22 @@ alias yu='yay -Syu'
 
 alias vi='nvim'
 alias vim='nvim'
-alias cat='bat --style=plain' 2>/dev/null || alias cat='cat'
-
 alias cls='clear'
 alias reload='source ~/.zshrc'
 alias zshconfig='nvim ~/.zshrc'
 
+# cat → bat si está instalado
+if command -v bat &>/dev/null; then
+    alias cat='bat --style=plain'
+fi
+
 # Hyprland
 alias hyprconf='nvim ~/.config/hypr/hyprland.conf'
 alias hyprlog='cat /tmp/hypr/$(ls /tmp/hypr/ | tail -1)/hyprland.log'
+
+# Apps
+alias nyx='~/Nyx-Python/start.sh'
+alias freecad='QT_QPA_PLATFORM=xcb freecad'
 
 # ── Variables de entorno ──────────────────────────────────────
 export EDITOR='nvim'
@@ -174,6 +205,5 @@ export MANPAGER='less -R --use-color -Dd+r -Du+b'
 export TERM='xterm-256color'
 export PATH="$HOME/.local/bin:$PATH"
 
-# ── LS_COLORS (Catppuccin-like) ───────────────────────────────
+# ── LS_COLORS ─────────────────────────────────────────────────
 export LS_COLORS="di=34:ln=36:so=35:pi=33:ex=32:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
-alias nyx="~/Nyx-Python/start.sh"

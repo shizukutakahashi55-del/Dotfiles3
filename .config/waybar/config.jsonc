@@ -6,7 +6,7 @@
     "passthrough": false,
     "gtk-layer-shell": true,
     "height": 42,
-    "margin-top": 8,
+    "margin-top": 4,
     "margin-left": 12,
     "margin-right": 12,
 
@@ -22,7 +22,7 @@
     },
 
     "custom/spotify": {
-        "format": "  {}",
+        "format": " 󰎈 {}",
         "return-type": "json",
         "on-click": "python ~/.config/waybar/media-popup.py 57",
         "on-scroll-up": "playerctl next",
@@ -74,26 +74,9 @@
             "default": "󰊠"
         },
         "persistent-workspaces": {
-            "*": 5
+            "*": 4
         },
-        "window-rewrite-default": "",
-        "window-rewrite": {
-            "class<alacritty>": "",
-            "class<kitty>": "",
-            "class<firefox>": "",
-            "class<chromium>": "",
-            "class<brave-browser>": "󰖟",
-            "class<discord>": "󰙯",
-            "class<steam>": "",
-            "class<krita>": "",
-            "class<dolphin>": "",
-            "class<spotify>": "",
-            "class<vscode>": "󰨞",
-            "class<org.kde.kate>": "󰧮",
-            "class<waypaper>": ""
-        }
     },
-
     "privacy": {
         "icon-spacing": 6,
         "icon-size": 16,
@@ -140,7 +123,7 @@
 
     "network": {
         "format-wifi": "󰤨 {essid}",
-        "format-ethernet": "󰈀 {ipaddr}",
+        "format-ethernet": "{ifname} ",
         "format-disconnected": "󰤭 offline",
         "on-click": "bash  ~/.config/rofi/rofi-network-manager.sh",
         "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",

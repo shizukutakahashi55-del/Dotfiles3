@@ -1,0 +1,100 @@
+/* ============================================================
+ * WAYBAR — Void Absolute (The Invisible Bar)
+ * Ultra-slim, floating icons, zero noise
+ * ============================================================ */
+
+@define-color bg_void   #050505;
+@define-color accent    #ffffff;
+@define-color ghost     #444444; /* Para iconos inactivos */
+@define-color smoke     #888888; /* Para texto secundario */
+
+/* Acentos Desaturados (Colores en iconos) */
+@define-color v_red     #cf6a4c;
+@define-color v_green   #8f9d6a;
+@define-color v_yellow  #f9ee98;
+@define-color v_blue    #7587a6;
+@define-color v_purple  #9b859d;
+@define-color v_cyan    #afc4db;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 11.5px; /* Un poco más pequeño para elegancia */
+    font-weight: 500;
+    border: none;
+    border-radius: 0;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+window#waybar {
+    background: transparent;
+}
+
+/* -------------------------------------------------------
+ * CONTENEDORES — Flotantes y casi invisibles
+ * ------------------------------------------------------- */
+.modules-left, .modules-center, .modules-right {
+    background: alpha(@bg_void, 0.85);
+    border-radius: 6px; /* Esquinas apenas suavizadas, nada de píldoras */
+    margin: 6px 4px;
+    padding: 2px 10px;
+    border: 1px solid alpha(@accent, 0.05); /* Borde fantasma */
+}
+
+/* -------------------------------------------------------
+ * MÓDULOS — Iconos con color y texto en humo
+ * ------------------------------------------------------- */
+#custom-power, #clock, #cpu, #memory, #pulseaudio, 
+#network, #bluetooth, #custom-notifications, #tray, #workspaces {
+    padding: 0 8px;
+    color: @smoke; /* El texto no distrae */
+}
+
+/* Solo los iconos o prefijos llevan el color fuerte */
+#custom-power { color: @v_red; font-size: 14px; }
+#clock        { color: @accent; font-weight: 700; }
+#cpu          { color: @v_blue; }
+#memory       { color: @v_green; }
+#pulseaudio   { color: @v_purple; }
+#bluetooth    { color: @v_cyan; }
+#network      { color: @v_yellow; }
+#custom-notifications { color: @v_red; }
+
+/* -------------------------------------------------------
+ * SPOTIFY — Slim Void
+ * ------------------------------------------------------- */
+#custom-spotify {
+    color: @v_green;
+    background: alpha(@v_green, 0.05);
+    padding: 0 15px;
+    margin: 4px;
+    border-radius: 4px;
+    border-left: 2px solid @v_green;
+}
+
+/* -------------------------------------------------------
+ * WORKSPACES — El Pacman Minimalista
+ * ------------------------------------------------------- */
+#workspaces button {
+    color: @ghost;
+    padding: 0 6px;
+}
+
+#workspaces button.active {
+    color: @accent;
+    /* En lugar de una caja, solo un resplandor en el icono */
+    text-shadow: 0 0 8px alpha(@accent, 0.6);
+}
+
+#workspaces button.urgent {
+    color: @v_red;
+}
+
+/* -------------------------------------------------------
+ * TRAY
+ * ------------------------------------------------------- */
+#tray {
+    color: @ghost;
+}
+#tray:hover {
+    color: @accent;
+}

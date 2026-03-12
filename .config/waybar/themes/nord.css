@@ -1,0 +1,96 @@
+/* ============================================================
+ * WAYBAR — Nord Minimal Pill (Compact & Elegant)
+ * ============================================================ */
+
+@define-color nord_bg      #2e3440;
+@define-color nord_fg      #eceff4;
+@define-color nord_cyan    #88c0d0;
+@define-color nord_blue    #81a1c1;
+@define-color nord_green   #a3be8c;
+@define-color nord_yellow  #ebcb8b;
+@define-color nord_orange  #d08770;
+@define-color nord_red     #bf616a;
+@define-color nord_purple  #b48ead;
+@define-color nord_teal    #8fbcbb;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 12px; /* Un poco más pequeño para ahorrar espacio */
+    font-weight: 700;
+    border: none;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+/* -------------------------------------------------------
+ * CONTENEDORES — Estilo Píldora Compacta
+ * ------------------------------------------------------- */
+.modules-left, .modules-center, .modules-right {
+    background: alpha(@nord_bg, 0.75);
+    border-radius: 20px; /* Píldora perfecta */
+    margin: 4px 2px;
+    padding: 0 8px;
+    border: 1px solid alpha(@nord_fg, 0.1); /* Borde casi invisible */
+}
+
+/* -------------------------------------------------------
+ * MÓDULOS — Compactos y con Color
+ * ------------------------------------------------------- */
+#custom-power, #clock, #cpu, #memory, #pulseaudio, 
+#network, #bluetooth, #custom-notifications, #tray, #workspaces {
+    padding: 0 8px;
+    margin: 3px 0;
+}
+
+/* Iconos con color pero sin fondo para que no se vea "pesado" */
+#custom-power         { color: @nord_red; }
+#clock                { color: @nord_fg; }
+#cpu                  { color: @nord_blue; border-left: 2px solid alpha(@nord_blue, 0.3); }
+#memory               { color: @nord_teal; border-left: 2px solid alpha(@nord_teal, 0.3); }
+#pulseaudio           { color: @nord_green; border-left: 2px solid alpha(@nord_green, 0.3); }
+#bluetooth            { color: @nord_cyan; }
+#network              { color: @nord_orange; }
+#custom-notifications { color: @nord_purple; }
+
+/* -------------------------------------------------------
+ * SPOTIFY — Versión Slim
+ * ------------------------------------------------------- */
+#custom-spotify {
+    color: @nord_green;
+    background: alpha(@nord_green, 0.1);
+    border-radius: 12px;
+    padding: 0 12px;
+    margin: 4px;
+    border: 1px solid alpha(@nord_green, 0.2);
+}
+
+/* -------------------------------------------------------
+ * WORKSPACES — Pacman & Ghosts Slim
+ * ------------------------------------------------------- */
+#workspaces button {
+    color: alpha(@nord_fg, 0.3);
+    padding: 0 4px;
+}
+
+#workspaces button.active {
+    color: @nord_cyan;
+    background: transparent;
+    /* Un pequeño punto o subrayado en lugar de un cuadro grande */
+    border-bottom: 2px solid @nord_cyan;
+    border-radius: 0;
+}
+
+#workspaces button.urgent {
+    color: @nord_red;
+}
+
+/* -------------------------------------------------------
+ * TRAY & EXTRAS
+ * ------------------------------------------------------- */
+#tray {
+    padding: 0 5px;
+}

@@ -1,0 +1,103 @@
+/* ============================================================
+ * WAYBAR — Retro Terminal (Block Edition)
+ * CRT phosphor green, squared borders, terminal vibes
+ * ============================================================ */
+
+@define-color base      #0a0f0a;
+@define-color text      #a0e8a0;
+@define-color phosphor  #33ff33;
+@define-color phosphor2 #00cc00;
+@define-color phosphor3 #009900;
+@define-color amber     #ffb000;
+@define-color cyan_crt  #00ffcc;
+@define-color red_crt   #ff3333;
+@define-color dim       #1a2a1a;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 12px;
+    font-weight: 700; /* Negrita para simular el sangrado del fósforo */
+    letter-spacing: 0.1em;
+    border: none;
+    border-radius: 0; /* Totalmente cuadrado */
+    transition: all 0.1s steps(4); /* Transición brusca tipo terminal */
+}
+
+window#waybar {
+    background: transparent;
+    color: @text;
+}
+
+/* -------------------------------------------------------
+ * CONTENEDORES — Estilo bloque de terminal
+ * ------------------------------------------------------- */
+.modules-left, .modules-center, .modules-right {
+    background: alpha(@base, 0.95);
+    border-radius: 0; /* Cuadrado */
+    padding: 0;
+    margin: 5px 4px;
+    border: 1px solid @phosphor3;
+    /* Efecto de resplandor verde */
+    box-shadow: inset 0 0 5px alpha(@phosphor3, 0.3), 0 0 10px alpha(@phosphor3, 0.2);
+}
+
+/* -------------------------------------------------------
+ * MÓDULOS
+ * ------------------------------------------------------- */
+#custom-power, #clock, #cpu, #memory, #pulseaudio, 
+#network, #bluetooth, #custom-notifications, #tray, #workspaces {
+    padding: 2px 12px;
+    margin: 0;
+    border-right: 1px solid alpha(@phosphor3, 0.3); /* Separador vertical */
+}
+
+#custom-power { color: @red_crt; border-right: 1px solid alpha(@red_crt, 0.3); }
+#clock        { color: @phosphor; background: alpha(@phosphor, 0.05); }
+#cpu          { color: @cyan_crt; }
+#memory       { color: @phosphor2; }
+#pulseaudio   { color: @amber; }
+#bluetooth    { color: @cyan_crt; }
+#network      { color: @phosphor; }
+
+/* -------------------------------------------------------
+ * SPOTIFY — Estilo comando de terminal
+ * ------------------------------------------------------- */
+#custom-spotify {
+    background: @dim;
+    color: @phosphor;
+    padding: 0 15px;
+    margin: 5px;
+    border: 1px solid @phosphor2;
+    font-style: italic;
+}
+
+/* -------------------------------------------------------
+ * WORKSPACES — Bloques sólidos
+ * ------------------------------------------------------- */
+#workspaces button {
+    color: @phosphor3;
+    padding: 0 8px;
+    border-radius: 0;
+}
+
+#workspaces button.active {
+    background: @phosphor3;
+    color: @base; /* Invertido como un cursor de terminal */
+}
+
+#workspaces button.urgent {
+    background: @red_crt;
+    color: @base;
+}
+
+#workspaces button:hover {
+    background: alpha(@phosphor, 0.2);
+    color: @phosphor;
+}
+
+/* -------------------------------------------------------
+ * EXTRAS — Scanlines effect sutil
+ * ------------------------------------------------------- */
+#clock {
+    text-shadow: 0 0 5px @phosphor;
+}

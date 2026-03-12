@@ -1,0 +1,117 @@
+/* ============================================================
+ * WAYBAR — Pastel Pop Compact (V3)
+ * Estilo: Compacto · Sin sombras · Pac-Man & Ghosts
+ * ============================================================ */
+
+/* --- Paleta Pastel Vívida --- */
+@define-color base      #2e2a3d; 
+@define-color mantle    #3b354d;
+@define-color crust     #463f5a;
+@define-color text      #ffffff;
+
+@define-color rose      #ffb3c6;
+@define-color lilac     #cba6f7;
+@define-color mint      #94e2d5;
+@define-color peach     #fab387;
+@define-color sky       #89dceb;
+@define-color butter    #f9e2af;
+@define-color lavender  #b4befe;
+@define-color coral     #f38ba8;
+
+/* --- Reset Global Compacto --- */
+* {
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", monospace;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: none;
+    border-radius: 0;
+    transition: all 0.2s ease;
+    min-height: 0; /* Clave para reducir el alto */
+    box-shadow: none;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+/* -------------------------------------------------------
+ * CONTENEDORES — Slim Design
+ * ------------------------------------------------------- */
+.modules-left, .modules-center, .modules-right {
+    background: alpha(@base, 0.7); 
+    border-radius: 10px;
+    padding: 1px 5px;
+    margin: 2px 4px;
+    border: 1px solid alpha(@text, 0.1);
+}
+
+/* -------------------------------------------------------
+ * MÓDULOS — Base Compacta
+ * ------------------------------------------------------- */
+#custom-power, #clock, #cpu, #memory, #pulseaudio, 
+#network, #custom-notifications, #tray, #bluetooth, #workspaces {
+    padding: 1px 8px;
+    margin: 2px 1px;
+    border-radius: 6px;
+}
+
+#custom-power { color: @coral; background: alpha(@coral, 0.15); }
+#clock { color: @lilac; background: alpha(@lilac, 0.15); }
+#cpu { color: @sky; background: alpha(@sky, 0.15); }
+#memory { color: @lavender; background: alpha(@lavender, 0.15); }
+#pulseaudio { color: @mint; background: alpha(@mint, 0.15); }
+#network { color: @peach; background: alpha(@peach, 0.15); }
+#bluetooth { color: @sky; background: alpha(@sky, 0.15); }
+#custom-notifications { color: @lavender; background: alpha(@lavender, 0.15); }
+
+/* Spotify Compacto */
+#custom-spotify {
+    background: @mint;
+    color: @base;
+    border-radius: 8px;
+    padding: 0 12px;
+    margin: 2px 4px;
+    font-weight: 800;
+}
+
+/* -------------------------------------------------------
+ * WORKSPACES — Pac-Man & Ghosts (Compacto)
+ * ------------------------------------------------------- */
+#workspaces button {
+    color: alpha(@text, 0.4);
+    font-size: 14px; /* Tamaño ideal para no estirar la barra */
+    padding: 0 4px;
+    background: transparent;
+}
+
+/* El Activo (Pac-Man) */
+#workspaces button.active {
+    color: @butter;
+    background: alpha(@butter, 0.2);
+    border-radius: 6px;
+}
+
+/* Los que tienen apps (Números) */
+#workspaces button.occupied {
+    color: @sky;
+    font-weight: 800;
+}
+
+/* Los Vacíos (Fantasmas) */
+#workspaces button.persistent {
+    color: alpha(@text, 0.35);
+}
+
+#workspaces button:hover {
+    background: alpha(@text, 0.1);
+    color: @text;
+}
+
+/* -------------------------------------------------------
+ * TRAY & OTROS
+ * ------------------------------------------------------- */
+#tray {
+    padding: 0 6px;
+}
+
+#custom-notifications.none { color: @text; }

@@ -1,156 +1,120 @@
-/*****----- Power Menu - Catppuccin Mocha + SVG Icons + User Image -----*****/
-
 configuration {
-    show-icons:         true;
-    font:               "JetBrainsMono Nerd Font Bold 14";
+    show-icons: true;
 }
 
 * {
-    base:       #1e1e2ecc;
-    surface0:   #313244;
-    overlay0:   #6c7086;
-    text:       #cdd6f4;
-    subtext:    #a6adc8;
-    mauve:      #cba6f7;
-    red:        #f38ba8;
-
-    background-color:   transparent;
-    text-color:         @text;
+    font: "JetBrainsMono Nerd Font Bold 12";
+    background: #1e1e2ecc;
+    foreground: #cdd6f4;
+    accent:     #cba6f7;
+    surface:    #313244;
 }
 
-/*****----- Main Window -----*****/
 window {
-    transparency:       "real";
-    location:           center;
-    anchor:             center;
-    fullscreen:         true;
-    background-color:   #1e1e2ecc;
-    cursor:             "default";
+    transparency: "real";
+    location: center;
+    anchor: center;
+    fullscreen: true;
+    background-color: @background;
 }
 
-/*****----- Main Box -----*****/
 mainbox {
-    enabled:            true;
-    spacing:            24px;
-    background-color:   transparent;
-    children:           [ "dummy", "userimage-box", "inputbar", "message", "listview", "dummy" ];
+    background-color: transparent;
+    orientation: vertical;
+    children: [ "dummy", "userimage-box", "inputbar", "message", "listview", "dummy" ];
+    spacing: 20px;
 }
 
-dummy {
-    background-color:   transparent;
-}
-
-/*****----- User Image centrada -----*****/
+/*****----- Imagen de Usuario -----*****/
 userimage-box {
-    background-color:   transparent;
-    children:           [ "dummy-left", "userimage", "dummy-right" ];
-    orientation:        horizontal;
-    expand:             true;
-}
-
-dummy-left, dummy-right {
-    background-color:   transparent;
-    expand:             true;
+    background-color: transparent;
+    orientation: horizontal;
+    children: [ "dummy", "userimage", "dummy" ];
 }
 
 userimage {
-    expand:             false;
-    width:              120px;
-    height:             120px;
-    border:             3px solid;
-    border-radius:      100%;
-    border-color:       @mauve;
-    background-color:   transparent;
-    background-image:   url("/home/rinooze/.config/rofi/images/user_circle.png", both);
-    horizontal-align:   0.5;
-    vertical-align:     0.5;
+    width: 200px;
+    height: 200px;
+    expand: false;
+    background-color: @surface;
+    background-image: url("/home/rinooze/.config/rofi/images/Rinooze.png", height);
+    border: 4px solid;
+    border-color: @accent;
+    border-radius: 100%;
 }
 
-/*****----- Prompt -----*****/
+/*****----- Inputbar (Goodbye) - CORREGIDO PARA CENTRAR -----*****/
 inputbar {
     enabled:            true;
-    padding:            0px;
     background-color:   transparent;
-    children:           [ "prompt" ];
+    orientation:        horizontal;
+    children:           [ "dummy", "prompt", "dummy" ]; /* Añadimos dummies a los lados */
 }
 
 prompt {
     enabled:            true;
-    font:               "JetBrainsMono Nerd Font Bold 18";
     background-color:   transparent;
-    text-color:         @mauve;
-    horizontal-align:   0.5;
-}
-
-/*****----- Message (uptime) -----*****/
-message {
-    enabled:            true;
-    padding:            8px 20px;
-    background-color:   transparent;
-}
-
-textbox {
-    font:               "JetBrainsMono Nerd Font 12";
-    background-color:   transparent;
-    text-color:         @subtext;
-    horizontal-align:   0.5;
-}
-
-/*****----- Listview -----*****/
-listview {
-    enabled:            true;
-    expand:             false;
-    columns:            5;
-    lines:              1;
-    cycle:              true;
-    dynamic:            false;
-    scrollbar:          false;
-    layout:             vertical;
-    fixed-height:       true;
-    fixed-columns:      true;
-    spacing:            20px;
-    margin:             0px 160px;
-    background-color:   transparent;
-    cursor:             "default";
-}
-
-/*****----- Elements -----*****/
-element {
-    enabled:            true;
-    padding:            30px 20px 20px 20px;
-    border-radius:      16px;
-    background-color:   #31324455;
-    text-color:         @subtext;
-    cursor:             pointer;
-    orientation:        vertical;
-    spacing:            14px;
-}
-
-element-icon {
-    size:               72px;
-    background-color:   transparent;
-    cursor:             inherit;
-    horizontal-align:   0.5;
-}
-
-element-text {
-    font:               "JetBrainsMono Nerd Font Bold 13";
-    background-color:   transparent;
-    text-color:         inherit;
-    cursor:             inherit;
+    text-color:         @accent;
+    font:               "JetBrainsMono Nerd Font Bold 24";
     horizontal-align:   0.5;
     vertical-align:     0.5;
 }
 
-element normal.normal {
-    background-color:   #31324455;
-    text-color:         @subtext;
+/*****----- Message (Uptime) - CORREGIDO PARA CENTRAR -----*****/
+message {
+    enabled:            true;
+    background-color:   transparent;
+    children:           [ "textbox" ];
+}
+
+textbox {
+    background-color:   transparent;
+    text-color:         @foreground;
+    horizontal-align:   0.5;
+    vertical-align:     0.5;
+    font:               "JetBrainsMono Nerd Font 12";
+}
+
+/*****----- Listview -----*****/
+listview {
+    background-color: transparent;
+    columns: 5;
+    lines: 1;
+    spacing: 20px;
+    margin: 0px 150px;
+    layout: vertical;
+    fixed-height: true;
+    fixed-columns: true;
+}
+
+element {
+    background-color: @surface;
+    text-color: @foreground;
+    orientation: vertical;
+    padding: 30px 0px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+element-icon {
+    background-color: transparent;
+    size: 60px;
+    horizontal-align: 0.5;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
 }
 
 element selected.normal {
-    background-color:   #cba6f720;
-    text-color:         @mauve;
-    border:             2px solid;
-    border-color:       @mauve;
-    border-radius:      16px;
+    background-color: @accent;
+    text-color: #1e1e2e;
+}
+
+dummy {
+    expand: true;
+    background-color: transparent;
 }

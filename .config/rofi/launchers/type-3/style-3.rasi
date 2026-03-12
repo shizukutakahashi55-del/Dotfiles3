@@ -1,99 +1,82 @@
-/**
- *
- * Author : Aditya Shakya (adi1090x)
- * Github : @adi1090x
- * 
- * Rofi Theme File
- * Rofi Version: 1.7.3
- **/
-
-/*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun";
+    modi:                        "drun";
     show-icons:                 true;
-    display-drun:               "";
-	drun-display-format:        "{name}";
+    display-drun:               "󰀻 Apps"; /* Icono de cuadritos + texto */
+    drun-display-format:        "{name}";
+}
+
+prompt {
+    enabled:                     true;
+    background-color:            transparent;
+    text-color:                  @accent;
 }
 
 /*****----- Global Properties -----*****/
-@import                          "shared/colors.rasi"
-@import                          "shared/fonts.rasi"
-*{
-  bgcolor:                        #141b1e95;
+* {
+    /* Paleta Catppuccin Mocha */
+    bg:          #1e1e2ecc; /* Fondo con transparencia */
+    fg:          #cdd6f4;    /* Texto principal */
+    accent:      #cba6f7;    /* Mauve para selecciones */
+    surface:     #31324480;  /* Superficie de los botones */
+    
+    background-color:   transparent;
+    text-color:         @fg;
 }
+
 /*****----- Main Window -----*****/
 window {
     transparency:                "real";
     location:                    center;
     anchor:                      center;
     fullscreen:                  true;
-    width:                       1920px;
-    height:                      1080px;
-    x-offset:                    0px;
-    y-offset:                    0px;
-
-    enabled:                     true;
-    margin:                      0px;
-    padding:                     0px;
-    border:                      0px solid;
-    border-radius:               0px;
-    border-color:                @selected;
-    background-color:            @bgcolor;
     cursor:                      "default";
+    background-color:            @bg;
 }
 
 /*****----- Main Box -----*****/
 mainbox {
     enabled:                     true;
-    spacing:                     100px;
-    margin:                      0px;
-    padding:                     100px 225px;
-    border:                      0px solid;
-    border-radius:               0px 0px 0px 0px;
-    border-color:                @selected;
-    background-color:            @bgcolor;
+    spacing:                     50px;
+    padding:                     100px 150px;
+    background-color:            transparent;
     children:                    [ "inputbar", "listview" ];
 }
 
-/*****----- Inputbar -----*****/
+/*****----- Inputbar (Barra de Búsqueda) -----*****/
 inputbar {
     enabled:                     true;
-    spacing:                     10px;
-    margin:                      0% 28%;
-    padding:                     10px;
-    border:                      1px solid;
-    border-radius:               6px;
-    border-color:                white / 25%;
-    background-color:            white / 5%;
-    text-color:                  @foreground;
+    spacing:                     15px;
+    margin:                      0% 25%;
+    padding:                     15px 25px;
+    border:                      2px solid;
+    border-radius:               12px;
+    border-color:                @accent;
+    background-color:            @surface;
+    text-color:                  @fg;
     children:                    [ "prompt", "entry" ];
 }
 
 prompt {
-    enabled:                     true;
-    background-color:            transparent;
-    text-color:                  inherit;
+    enabled:            true;
+    background-color:   transparent;
+    text-color:         @accent;
+    vertical-align:     0.5;
 }
-textbox-prompt-colon {
-    enabled:                     true;
-    expand:                      false;
-    str:                         "::";
-    background-color:            transparent;
-    text-color:                  inherit;
-}
+
 entry {
-    enabled:                     true;
-    background-color:            transparent;
-    text-color:                  inherit;
-    cursor:                      text;
-    placeholder:                 "Search";
-    placeholder-color:           inherit;
+    enabled:            true;
+    background-color:   transparent;
+    text-color:         @fg;
+    cursor:             text;
+    placeholder:        "Search...";
+    placeholder-color:  inherit;
+    vertical-align:     0.5;
 }
 
 /*****----- Listview -----*****/
 listview {
     enabled:                     true;
-    columns:                     7;
+    columns:                     6;
     lines:                       4;
     cycle:                       true;
     dynamic:                     true;
@@ -103,55 +86,47 @@ listview {
     fixed-height:                true;
     fixed-columns:               true;
     
-    spacing:                     0px;
-    margin:                      0px;
-    padding:                     0px;
-    border:                      0px solid;
-    border-radius:               0px;
-    border-color:                @selected;
+    spacing:                     30px;
     background-color:            transparent;
-    text-color:                  @foreground;
-    cursor:                      "default";
-}
-scrollbar {
-    handle-width:                5px ;
-    handle-color:                @selected;
-    border-radius:               0px;
-    background-color:            @background-alt;
 }
 
-/*****----- Elements -----*****/
+/*****----- Elements (ICONOS AQUÍ) -----*****/
 element {
     enabled:                     true;
     spacing:                     15px;
-    margin:                      0px;
-    padding:                     35px 10px;
-    border:                      0px solid;
-    border-radius:               15px;
-    border-color:                @selected;
+    padding:                     30px 10px;
+    border-radius:               20px;
     background-color:            transparent;
-    text-color:                  @foreground;
     orientation:                 vertical;
     cursor:                      pointer;
 }
+
 element normal.normal {
     background-color:            transparent;
-    text-color:                  @foreground;
+    text-color:                  @fg;
 }
+
 element selected.normal {
-    background-color:            white / 5%;
-    text-color:                  @foreground;
+    background-color:            @surface;
+    text-color:                  @accent;
+    border:                      2px solid;
+    border-color:                @accent;
 }
+
 element-icon {
     background-color:            transparent;
-    text-color:                  inherit;
-    size:                        72px;
+    size:                        84px; /* Tamaño grande y nítido */
     cursor:                      inherit;
+    horizontal-align:            0.5;
+    vertical-align:              0.5;
+    /* Esto evita que el icono se estire si el nombre de la app es largo */
+    expand:                      false; 
 }
+
 element-text {
     background-color:            transparent;
     text-color:                  inherit;
-    highlight:                   inherit;
+    font:                        "JetBrainsMono Nerd Font Bold 11";
     cursor:                      inherit;
     vertical-align:              0.5;
     horizontal-align:            0.5;
@@ -159,17 +134,8 @@ element-text {
 
 /*****----- Message -----*****/
 error-message {
-    padding:                     100px;
-    border:                      0px solid;
-    border-radius:               0px;
-    border-color:                @selected;
-    background-color:            black / 10%;
-    text-color:                  @foreground;
-}
-textbox {
-    background-color:            transparent;
-    text-color:                  @foreground;
-    vertical-align:              0.5;
-    horizontal-align:            0.0;
-    highlight:                   none;
+    padding:                     20px;
+    border-radius:               12px;
+    background-color:            @bg;
+    text-color:                  #f38ba8; /* Rojo para errores */
 }

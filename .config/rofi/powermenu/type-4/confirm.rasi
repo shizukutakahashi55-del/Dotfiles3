@@ -1,0 +1,70 @@
+/*****----- Configuración de Confirmación -----*****/
+configuration {
+    show-icons: false;
+}
+
+* {
+    /* Catppuccin Mocha */
+    bg:      #1e1e2ecc;
+    fg:      #cdd6f4;
+    accent:  #cba6f7;
+    button:  #313244;
+    
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+window {
+    width:            320px;
+    location:         center;
+    anchor:           center;
+    x-offset:         0px;
+    y-offset:         0px;
+    padding:          20px;
+    border:           2px solid;
+    border-radius:    20px;
+    border-color:     @accent;
+    background-color: @bg;
+}
+
+mainbox {
+    children:         [ "inputbar", "listview" ];
+    spacing:          15px;
+}
+
+inputbar {
+    children:         [ "prompt" ];
+}
+
+prompt {
+    font:             "JetBrainsMono Nerd Font Bold 14";
+    horizontal-align: 0.5;
+    text-color:       @fg;
+}
+
+listview {
+    columns:          2;
+    lines:            1;
+    cycle:            true;
+    spacing:          12px;
+    layout:           vertical;
+    fixed-height:     true;
+}
+
+element {
+    padding:          10px;
+    border-radius:    12px;
+    background-color: @button;
+    cursor:           pointer;
+}
+
+element-text {
+    font:             "JetBrainsMono Nerd Font Bold 12";
+    horizontal-align: 0.5;
+    text-color:       inherit;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color:       #1e1e2e;
+}
