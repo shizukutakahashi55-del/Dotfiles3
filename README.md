@@ -8,6 +8,12 @@
 ## 📸 Preview
 
 <!-- Add screenshots here -->
+~/Dotfiles3/1
+~/Dotfiles3/2
+~/Dotfiles3/3
+~/Dotfiles3/4
+~/Dotfiles3/5
+~/Dotfiles3/6
 
 ---
 
@@ -82,7 +88,7 @@ chmod +x link.sh
 
 ## 🔗 Wallpapers
 
-Wallpapers live at `~/Pictures/Wallpapers/`. The repo contains a `wallpapers/` symlink pointing there. Add your own images to that folder and set them via `waypaper`.
+Wallpapers live at `~/Pictures/Wallpapers/`. The repo contains a `wallpapers/` symlink pointing there. Add your own images to that folder and set them via `waypaper`. Updated version is managed with hyprpaper and quickshell to replace walls.
 
 ---
 
