@@ -8,12 +8,8 @@
 ## 📸 Preview
 
 <!-- Add screenshots here -->
-~/Dotfiles3/1
-~/Dotfiles3/2
-~/Dotfiles3/3
-~/Dotfiles3/4
-~/Dotfiles3/5
-~/Dotfiles3/6
+/home/rinooze/Dotfiles3/1
+
 
 ---
 
