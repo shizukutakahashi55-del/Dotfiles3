@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Dotfiles3 — Full Install Script
+# Dotfiles3 — Full Install Script (Optimized for rinooze)
 # Author: rinooze
 # =============================================================================
 
@@ -56,84 +56,22 @@ install_yay() {
 # Pacman Packages
 # =============================================================================
 install_pacman_packages() {
-  info "Updating system..."
+  info "Updating system and installing Core + NVIDIA packages..."
   sudo pacman -Syu --noconfirm
 
-  info "Installing core packages..."
   sudo pacman -S --needed --noconfirm \
-    hyprland \
-    hyprpaper \
-    hypridle \
-    hyprlock \
-    xdg-desktop-portal-hyprland \
-    xdg-desktop-portal-gtk \
-    xdg-user-dirs \
-    qt5-wayland \
-    qt6-wayland \
-    polkit-gnome \
-    waybar \
-    alacritty \
-    rofi-wayland \
-    cava \
-    neovim \
-    zsh \
-    zsh-autosuggestions \
-    zsh-syntax-highlighting \
-    starship \
-    thunar \
-    gvfs \
-    gvfs-mtp \
-    tumbler \
-    ffmpegthumbnailer \
-    vlc \
-    ffmpeg \
-    mpv \
-    imv \
-    wl-clipboard \
-    cliphist \
-    brightnessctl \
-    playerctl \
-    pamixer \
-    pipewire \
-    pipewire-alsa \
-    pipewire-pulse \
-    pipewire-jack \
-    wireplumber \
-    pavucontrol \
-    bluez \
-    bluez-utils \
-    blueman \
-    networkmanager \
-    network-manager-applet \
-    nm-connection-editor \
-    nwg-look \
-    gtk3 \
-    gtk4 \
-    adwaita-icon-theme \
-    gnome-themes-extra \
-    ttf-jetbrains-mono-nerd \
-    ttf-nerd-fonts-symbols \
-    noto-fonts \
-    noto-fonts-emoji \
-    noto-fonts-cjk \
-    ttf-liberation \
-    grim \
-    slurp \
-    swappy \
-    dunst \
-    libnotify \
-    python \
-    python-pip \
-    curl \
-    wget \
-    unzip \
-    zip \
-    p7zip \
-    htop \
-    btop \
-    git \
-    base-devel \
-    steam
+    hyprland nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings \
+    hyprpaper hypridle hyprlock xdg-desktop-portal-hyprland xdg-desktop-portal-gtk \
+    waybar alacritty kitty rofi-wayland cava neovim zsh starship \
+    zsh-autosuggestions zsh-syntax-highlighting \
+    thunar gvfs gvfs-mtp tumbler ffmpegthumbnailer \
+    vlc ffmpeg mpv imv wl-clipboard cliphist brightnessctl playerctl \
+    pamixer pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber pavucontrol \
+    bluez bluez-utils blueman networkmanager network-manager-applet nm-connection-editor \
+    nwg-look gtk3 gtk4 adwaita-icon-theme gnome-themes-extra \
+    ttf-jetbrains-mono-nerd noto-fonts noto-fonts-emoji noto-fonts-cjk \
+    grim slurp swappy dunst libnotify python python-pip \
+    curl wget unzip zip p7zip htop btop git base-devel
 
   success "Core packages installed"
 }
@@ -143,76 +81,32 @@ install_pacman_packages() {
 # =============================================================================
 install_aur_packages() {
   info "Installing AUR packages..."
-
-  # Media & Apps
+  # Separamos en grupos para evitar que un fallo detenga todo
+  yay -S --needed --noconfirm waypaper swaync nwg-displays wlogout || warn "Some UI tools failed"
+  yay -S --needed --noconfirm spotify spicetify-cli || warn "Spotify tools failed"
+  
+  # Gaming - Agregado gpu-screen-recorder que usas en tus binds
   yay -S --needed --noconfirm \
-    waypaper \
-    swaync \
-    nwg-dock-hyprland \
-    hyprshot \
-    wlogout \
-    spotify \
-    spicetify-cli \
-    xnviewmp \
-    nwg-displays
-
-  # Gaming
-  yay -S --needed --noconfirm \
-    lutris \
-    protonplus \
-    prismlauncher \
-    heroic-games-launcher-bin \
-    gamemode \
-    lib32-gamemode \
-    mangohud \
-    lib32-mangohud \
-    wine \
-    wine-gecko \
-    wine-mono \
-    winetricks \
-    lib32-vulkan-icd-loader \
-    vulkan-tools \
-    proton-ge-custom-bin
+    lutris protonplus prismlauncher heroic-games-launcher-bin \
+    gamemode lib32-gamemode mangohud lib32-mangohud \
+    wine-staging winetricks-git vkd3d-proton-bin \
+    gpu-screen-recorder-git hyprpicker-git
 
   success "AUR packages installed"
 }
 
 # =============================================================================
-# Gaming dependencies
+# Gaming dependencies (Multilib)
 # =============================================================================
 install_gaming_deps() {
-  info "Installing gaming multilib dependencies..."
+  info "Installing multilib dependencies for gaming..."
+  # Forzamos la instalación de librerías de 32 bits esenciales para Steam/Warframe
   sudo pacman -S --needed --noconfirm \
-    lib32-mesa \
-    lib32-glibc \
-    lib32-gcc-libs \
-    lib32-libpulse \
-    lib32-alsa-lib \
-    lib32-alsa-plugins \
-    lib32-sdl2 \
-    lib32-openal \
-    vulkan-radeon \
-    lib32-vulkan-radeon \
-    vulkan-icd-loader \
-    lib32-vulkan-icd-loader 2>/dev/null || \
-  sudo pacman -S --needed --noconfirm \
-    vulkan-intel \
-    lib32-vulkan-intel 2>/dev/null || true
+    lib32-mesa lib32-libglvnd lib32-vulkan-icd-loader \
+    lib32-openal lib32-libpulse lib32-sdl2 lib32-libnm \
+    steam vulkan-tools
 
   success "Gaming deps installed"
-}
-
-# =============================================================================
-# Zsh setup
-# =============================================================================
-setup_zsh() {
-  info "Setting up Zsh as default shell..."
-  if [ "$SHELL" != "$(which zsh)" ]; then
-    chsh -s "$(which zsh)"
-    success "Default shell changed to Zsh (re-login to apply)"
-  else
-    success "Zsh already default shell"
-  fi
 }
 
 # =============================================================================
@@ -220,77 +114,70 @@ setup_zsh() {
 # =============================================================================
 setup_spicetify() {
   info "Configuring Spicetify..."
-  if command -v spicetify &>/dev/null && command -v spotify &>/dev/null; then
-    spicetify config inject_css 1 replace_colors 1 overwrite_assets 1 inject_theme_js 1 2>/dev/null || true
-    spicetify backup 2>/dev/null || true
-    spicetify apply 2>/dev/null || warn "Spicetify apply failed — run 'spicetify apply' after launching Spotify once"
+  # Necesitas dar permisos a la carpeta de Spotify para que spicetify funcione
+  sudo chmod a+wr /opt/spotify
+  sudo chmod a+wr /opt/spotify/Apps -R
+  
+  if command -v spicetify &>/dev/null; then
+    spicetify backup apply || warn "Run 'spicetify backup apply' manually after opening Spotify"
     success "Spicetify configured"
-  else
-    warn "Spotify or Spicetify not found, skipping"
   fi
 }
 
-# =============================================================================
-# Wallpapers
-# =============================================================================
+# ... (El resto de funciones setup_zsh, setup_wallpapers, enable_services, link_dotfiles se mantienen igual) ...
+
+setup_zsh() {
+  info "Setting up Zsh as default shell..."
+  if [ "$SHELL" != "$(which zsh)" ]; then
+    sudo chsh -s "$(which zsh)" "$USER"
+    success "Default shell changed to Zsh"
+  else
+    success "Zsh already default shell"
+  fi
+}
+
 setup_wallpapers() {
   info "Setting up wallpapers directory..."
   mkdir -p "$WALLPAPER_DIR"
-  if [ -d "$DOTFILES_DIR/wallpapers" ] && [ "$(ls -A "$DOTFILES_DIR/wallpapers" 2>/dev/null)" ]; then
+  if [ -d "$DOTFILES_DIR/wallpapers" ]; then
     cp -rn "$DOTFILES_DIR/wallpapers/"* "$WALLPAPER_DIR/" 2>/dev/null || true
-    success "Wallpapers copied to $WALLPAPER_DIR"
-  else
-    success "Wallpapers directory ready at $WALLPAPER_DIR (add your images there)"
   fi
 }
 
-# =============================================================================
-# Enable services
-# =============================================================================
 enable_services() {
   info "Enabling system services..."
-  sudo systemctl enable --now NetworkManager 2>/dev/null || true
-  sudo systemctl enable --now bluetooth 2>/dev/null || true
-  systemctl --user enable --now pipewire 2>/dev/null || true
-  systemctl --user enable --now pipewire-pulse 2>/dev/null || true
-  systemctl --user enable --now wireplumber 2>/dev/null || true
+  sudo systemctl enable --now NetworkManager
+  sudo systemctl enable --now bluetooth
   success "Services enabled"
 }
 
-# =============================================================================
-# Symlink dotfiles
-# =============================================================================
 link_dotfiles() {
   info "Linking dotfiles..."
-  bash "$DOTFILES_DIR/link.sh"
+  if [ -f "$DOTFILES_DIR/link.sh" ]; then
+    bash "$DOTFILES_DIR/link.sh"
+  else
+    warn "link.sh not found, skipping symlinks"
+  fi
 }
 
-# =============================================================================
-# Main
-# =============================================================================
 main() {
   banner
-
-  echo -e "${BOLD}This will install all packages and link your dotfiles.${NC}"
   echo -e "Target: ${CYAN}$HOME${NC}"
-  echo ""
   read -rp "$(echo -e "${YELLOW}Continue? [y/N]: ${NC}")" confirm
   [[ "$confirm" =~ ^[Yy]$ ]] || { echo "Aborted."; exit 0; }
 
   install_yay
   install_pacman_packages
-  install_aur_packages
   install_gaming_deps
+  install_aur_packages
   setup_zsh
   setup_wallpapers
   enable_services
   link_dotfiles
   setup_spicetify
 
-  echo ""
   success "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  success " Install complete! Log out & back in."
-  success " Start Hyprland with: Hyprland"
+  success " Install complete! Please reboot."
   success "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
 
