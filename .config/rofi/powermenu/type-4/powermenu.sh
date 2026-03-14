@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+## Based on Dotfiles : Aditya Shakya (adi1090x)
 # Rutas absolutas para evitar errores
 dir="$HOME/.config/rofi/powermenu/type-4"
 theme='style-5'

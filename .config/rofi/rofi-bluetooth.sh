@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================
 #  rofi-bluetooth.sh — rinooze
-#  Control de bluetooth con rofi + bluetoothctl
+#  Bluetooth control with rofi + bluetoothctl
 # ============================================================
 THEME="$HOME/.config/rofi/network.rasi"
 
@@ -32,13 +32,13 @@ device_battery() {
     bluetoothctl info "$mac" | awk '/Battery Percentage:/{gsub(/[()]/,"",$3); print $3"%"}' 2>/dev/null
 }
 
-# ── Menú principal ────────────────────────────────────────────
+# ── Main Menu ─────────────────────────────────────────────────
 main_menu() {
     local power=$(bt_power)
     local power_label="󰂲 Bluetooth: OFF"
     [ "$power" = "yes" ] && power_label="󰂱 Bluetooth: ON"
 
-    local options="${power_label}\n󰂴 Dispositivos conectados\n󰂰 Dispositivos emparejados\n󰍷 Escanear nuevos dispositivos\n󰂲 Desconectar todo"
+    local options="${power_label}\n󰂴 Connected devices\n󰂰 Paired devices\n󰍷 Scan for new devices\n󰂲 Disconnect all"
 
     echo -e "$options" | rofi -dmenu \
         -p "Bluetooth" \
@@ -46,7 +46,7 @@ main_menu() {
         -theme "$THEME"
 }
 
-# ── Dispositivos emparejados ──────────────────────────────────
+# ── Paired Devices Menu ───────────────────────────────────────
 paired_menu() {
     local devices=$(paired_devices)
     local options=""
@@ -56,15 +56,15 @@ paired_menu() {
         local connected=$(is_connected "$mac")
         local battery=$(device_battery "$mac")
         local marker=""
-        [ "$connected" = "yes" ] && marker=" ✓ conectado"
+        [ "$connected" = "yes" ] && marker=" ✓ connected"
         [ -n "$battery" ] && marker="${marker} 󰁹${battery}"
         options+="${name}${marker}|${mac}\n"
     done <<< "$devices"
 
-    [ -z "$options" ] && { notify-send "Bluetooth" "No hay dispositivos emparejados" --expire-time=2000; return; }
+    [ -z "$options" ] && { notify-send "Bluetooth" "No paired devices found" --expire-time=2000; return; }
 
     local selected=$(echo -e "$options" | sed '/^$/d' | awk -F'|' '{print $1}' | rofi -dmenu \
-        -p "Dispositivos emparejados" \
+        -p "Paired devices" \
         -i \
         -theme "$THEME")
 
@@ -77,19 +77,19 @@ paired_menu() {
     if [ "$connected" = "yes" ]; then
         device_action_menu "$mac" "$selected"
     else
-        notify-send "Bluetooth" "🔗 Conectando a $selected..." --expire-time=2000
+        notify-send "Bluetooth" "🔗 Connecting to $selected..." --expire-time=2000
         bluetoothctl connect "$mac" && \
-            notify-send "Bluetooth" "✓ Conectado a $selected" --expire-time=2000 || \
-            notify-send "Bluetooth" "✗ Error al conectar" --expire-time=2000
+            notify-send "Bluetooth" "✓ Connected to $selected" --expire-time=2000 || \
+            notify-send "Bluetooth" "✗ Connection error" --expire-time=2000
     fi
 }
 
-# ── Acciones sobre dispositivo ────────────────────────────────
+# ── Device Actions Menu ───────────────────────────────────────
 device_action_menu() {
     local mac="$1"
     local name="$2"
 
-    local action=$(echo -e "󰂱 Desconectar\n󰍷 Información\n󰚃 Olvidar dispositivo" | rofi -dmenu \
+    local action=$(echo -e "󰂱 Disconnect\n󰍷 Information\n󰚃 Forget device" | rofi -dmenu \
         -p "$name" \
         -i \
         -theme "$THEME")
@@ -97,24 +97,24 @@ device_action_menu() {
     [ -z "$action" ] && return
 
     case "$action" in
-        *"Desconectar"*)
+        *"Disconnect"*)
             bluetoothctl disconnect "$mac"
-            notify-send "Bluetooth" "󰂲 $name desconectado" --expire-time=2000
+            notify-send "Bluetooth" "󰂲 $name disconnected" --expire-time=2000
             ;;
-        *"Información"*)
+        *"Information"*)
             local info=$(bluetoothctl info "$mac" | grep -E 'Name|Connected|Paired|Trusted|Battery' | sed 's/^\s*//')
             notify-send "Bluetooth — $name" "$info" --expire-time=5000
             ;;
-        *"Olvidar"*)
+        *"Forget"*)
             bluetoothctl remove "$mac"
-            notify-send "Bluetooth" "🗑 $name eliminado" --expire-time=2000
+            notify-send "Bluetooth" "🗑 $name removed" --expire-time=2000
             ;;
     esac
 }
 
-# ── Escanear nuevos dispositivos ──────────────────────────────
+# ── Scan for New Devices ──────────────────────────────────────
 scan_menu() {
-    notify-send "Bluetooth" "󰍷 Escaneando 10 segundos..." --expire-time=3000
+    notify-send "Bluetooth" "󰍷 Scanning for 10 seconds..." --expire-time=3000
     bluetoothctl scan on &
     local scan_pid=$!
     sleep 10
@@ -127,14 +127,14 @@ scan_menu() {
 
     while IFS='|' read -r mac name; do
         [ -z "$mac" ] && continue
-        echo "$paired" | grep -q "$mac" && continue  # saltar ya emparejados
+        echo "$paired" | grep -q "$mac" && continue  # skip already paired
         options+="${name} (${mac})|${mac}\n"
     done <<< "$devices"
 
-    [ -z "$options" ] && { notify-send "Bluetooth" "No se encontraron dispositivos nuevos" --expire-time=2000; return; }
+    [ -z "$options" ] && { notify-send "Bluetooth" "No new devices found" --expire-time=2000; return; }
 
     local selected=$(echo -e "$options" | sed '/^$/d' | awk -F'|' '{print $1}' | rofi -dmenu \
-        -p "Nuevos dispositivos" \
+        -p "New devices" \
         -i \
         -theme "$THEME")
 
@@ -143,21 +143,21 @@ scan_menu() {
     local mac=$(echo -e "$options" | sed '/^$/d' | awk -F'|' -v sel="$selected" '$1==sel{print $2}')
     [ -z "$mac" ] && return
 
-    notify-send "Bluetooth" "🔗 Emparejando con $selected..." --expire-time=3000
+    notify-send "Bluetooth" "🔗 Pairing with $selected..." --expire-time=3000
     bluetoothctl pair "$mac" && \
         bluetoothctl trust "$mac" && \
         bluetoothctl connect "$mac" && \
-        notify-send "Bluetooth" "✓ Conectado a $selected" --expire-time=2000 || \
-        notify-send "Bluetooth" "✗ Error al emparejar" --expire-time=2000
+        notify-send "Bluetooth" "✓ Connected to $selected" --expire-time=2000 || \
+        notify-send "Bluetooth" "✗ Pairing error" --expire-time=2000
 }
 
-# ── Desconectar todo ──────────────────────────────────────────
+# ── Disconnect All ────────────────────────────────────────────
 disconnect_all() {
     connected_devices | while read -r mac; do
         [ -z "$mac" ] && continue
         bluetoothctl disconnect "$mac"
     done
-    notify-send "Bluetooth" "󰂲 Todos desconectados" --expire-time=2000
+    notify-send "Bluetooth" "󰂲 All devices disconnected" --expire-time=2000
 }
 
 # ── Main ──────────────────────────────────────────────────────
@@ -169,22 +169,22 @@ case "$selected" in
         power=$(bt_power)
         if [ "$power" = "yes" ]; then
             bluetoothctl power off
-            notify-send "Bluetooth" "󰂲 Bluetooth apagado" --expire-time=2000
+            notify-send "Bluetooth" "󰂲 Bluetooth off" --expire-time=2000
         else
             bluetoothctl power on
-            notify-send "Bluetooth" "󰂱 Bluetooth encendido" --expire-time=2000
+            notify-send "Bluetooth" "󰂱 Bluetooth on" --expire-time=2000
         fi
         ;;
-    *"conectados"*)
+    *"Connected devices"*)
         paired_menu
         ;;
-    *"emparejados"*)
+    *"Paired devices"*)
         paired_menu
         ;;
-    *"Escanear"*)
+    *"Scan"*)
         scan_menu
         ;;
-    *"Desconectar todo"*)
+    *"Disconnect all"*)
         disconnect_all
         ;;
 esac
