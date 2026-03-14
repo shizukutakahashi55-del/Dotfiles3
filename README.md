@@ -98,3 +98,4 @@ Wallpapers live at `~/Pictures/Wallpapers/`. The repo contains a `wallpapers/` s
 - Spicetify is applied after Spotify install; run `spicetify apply` manually if it fails
 - Gaming: Proton GE can be managed from **ProtonPlus** after install
 - Added Waybar themes and script to change them
+- I'm lazy so I didn't update those ".sh" files so check them fist or just copy the configs.
